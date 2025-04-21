@@ -1,0 +1,93 @@
+/* ────────────────────────────────────────────────
+   FormAnimal.css 
+   ────────────────────────────────────────────────*/
+
+/* CARD principal */
+.form-animal {
+  max-width: 900px;
+  margin: 40px auto;
+  background: #f5f6f7;               
+  border-left: 6px solid #4f8dff;    
+  padding: 32px 40px;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0,0,0,.08);
+}
+
+/* HEADINGS */
+.form-animal h2 {
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+.form-animal h4 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin: 2rem 0 1rem;
+  padding: 6px 12px;
+  background:#e9ecef;                
+  border-radius: 6px;
+}
+
+/* GRUPO “section” */
+.section-box {
+  background:#ffffff;
+  border:1px solid #e5e7eb;
+  padding:16px 20px;
+  border-radius:8px;
+  box-shadow:0 2px 6px rgba(0,0,0,.04);
+}
+
+/* INPUTS / SELECTs */
+.form-animal .form-control,
+.form-animal .form-select {
+  background:#fcfcfd;                
+  border-color:#ced4da;
+  max-width: 100%;
+}
+@media (min-width:768px){
+  .form-animal .form-control,
+  .form-animal .form-select{
+    max-width: 75%;                  
+  }
+}
+
+/* CHECKBOX – bem visível em qualquer fundo */
+.form-check-input{
+  width:1.3em;
+  height:1.3em;
+  margin-top:0;
+  cursor:pointer;
+
+  border:2px solid #4f8dff;          
+  border-radius:4px;
+  background:#ffffff;
+  box-shadow:0 0 0 1px #4f8dff inset;
+
+  accent-color:#4f8dff;              
+  transition:.15s;
+}
+.form-check-input:checked{
+  background-color:#4f8dff;          
+  box-shadow:none;
+}
+.form-check-input:focus{
+  outline:none;
+  box-shadow:0 0 0 2px rgba(79,141,255,.4);
+}
+.form-check-label{
+  margin-left:6px;
+  cursor:pointer;
+  user-select:none;
+}
+
+/* Botão “X” remover vacina */
+.btn-outline-danger.btn-sm{
+  padding:2px 8px;
+  font-size:0.8rem;
+}
+
+/* Zebra nas linhas de vacinas para legibilidade */
+.vacina-row:nth-child(odd){
+  background:#f8f9fa;
+  border-radius:4px;
+  padding:4px;
+}
