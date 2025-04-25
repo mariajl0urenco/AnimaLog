@@ -105,20 +105,18 @@ export default function HistoricoAnimais() {
                   </h6>
 
                   <p className="card-text small">
-                    <strong>Chip:</strong> {a.chip}<br />
-                    <strong>Vacinas:</strong> {a.vacinas || 'N/D'}<br />
-                    <strong>Doenças:</strong> {a.doencas || 'N/D'}<br />
-                    <strong>Entrada:</strong> {a.entrada?.slice(0, 10) || 'N/D'}<br />
-                    <strong>Saída:</strong> {a.saida?.slice(0, 10) || 'N/D'}<br />
-                    <strong>Motivo:</strong> {a.motivo_saida === 'adocao' ? 'Adoção' : 'Falecimento'}<br />
-                    {a.motivo_saida === 'adocao' && a.dados_adotante && (
-                      <>
-                        <strong>Dados do Adotante:</strong><br />
-                        {a.dados_adotante}<br />
-                      </>
-                    )}
-                    <strong>Observações:</strong> {a.observacoes || 'Sem observações.'}
-                  </p>
+  <strong>Chip:</strong> {a.chip}<br/>
+  <strong>Entrada:</strong> {a.entrada?.slice(0,10) || 'N/D'}<br/>
+  <strong>Saída:</strong> {a.saida?.slice(0,10) || 'N/D'}<br/>
+  <strong>Motivo:</strong> {a.motivo_saida === 'adocao' ? 'Adoção' : 'Falecimento'}<br/>
+  {a.motivo_saida === 'adocao' && a.dados_adotante && (
+    <>
+      <strong>Dados do Adotante:</strong><br/>
+      {a.dados_adotante}
+    </>
+  )}
+</p>
+
 
                   <Button
                     variant="outline-primary"
@@ -200,3 +198,4 @@ export default function HistoricoAnimais() {
     </div>
   );
 }
+

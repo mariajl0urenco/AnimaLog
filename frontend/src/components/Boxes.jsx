@@ -40,7 +40,7 @@ export default function Boxes() {
     fetchBoxesAndCounts();
   }, []);
 
-  // carrega somente animais da box selecionada
+  // carrega somente animais da box selecionada 
   useEffect(() => {
     if (!boxSelecionada) return;
     (async () => {
