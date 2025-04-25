@@ -23,11 +23,13 @@ app.use('/animais/uploads', express.static(path.join(__dirname, 'uploads')));
 const animaisRouter = require('./routes/animais');
 const vacinasRouter = require('./routes/vacinas');
 const boxesRouter   = require('./routes/boxes');
+const testesRouter = require('./routes/testes');
 
 // monta as rotas na ordem correta
 app.use('/animais',      animaisRouter);
 app.use('/animais',      vacinasRouter);  
 app.use('/boxes',        boxesRouter);
+app.use('/animais', testesRouter);
 
 // Endpoint base
 app.get('/', (_req, res) => {

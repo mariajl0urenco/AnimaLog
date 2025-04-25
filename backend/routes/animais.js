@@ -1,25 +1,24 @@
-// routes/animais.js
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 const { Pool } = require('pg');
-const multer  = require('multer');
-const path    = require('path');
+const multer = require('multer');
+const path = require('path');
 require('dotenv').config();
 
 // ────────── Base de dados ──────────
 const pool = new Pool({
-  host:     process.env.PGHOST,
-  user:     process.env.PGUSER,
+  host: process.env.PGHOST,
+  user: process.env.PGUSER,
   password: process.env.PGPASSWORD,
   database: process.env.PGDATABASE,
-  port:     process.env.PGPORT
+  port: process.env.PGPORT
 });
 
 // ────────── Multer (uploads) ──────────
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => cb(null, 'uploads/'),
-  filename:    (_req, file, cb) => {
-    const ext  = path.extname(file.originalname);
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname);
     const nome = Date.now() + '-' + Math.round(Math.random() * 1e9) + ext;
     cb(null, nome);
   }
@@ -57,7 +56,8 @@ router.post('/', upload.single('foto'), async (req, res) => {
     esterilizado, desparasitado, produto_desparasitado, data_desparasitado,
     testes, data_testes, tratamento, tratamento_iniciado,
     titular, box, motivo_entrada, motivo_volta, local_ocorrencia,
-    concelho, data_nascimento, raca, cor
+    concelho, data_nascimento, raca, cor,
+    nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso
   } = req.body;
   const foto = req.file ? req.file.filename : null;
 
@@ -69,13 +69,15 @@ router.post('/', upload.single('foto'), async (req, res) => {
          esterilizado, desparasitado, produto_desparasitado, data_desparasitado,
          testes, data_testes, tratamento, tratamento_iniciado, titular, box,
          motivo_entrada, motivo_volta, local_ocorrencia, concelho, data_nascimento,
-         raca, cor, foto
+         raca, cor, foto,
+         nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso
        ) VALUES (
          $1,$2,$3,$4,$5,$6,$7,$8,
          $9,$10,$11,$12,$13,$14,
          $15,$16,$17,$18,$19,$20,
          $21,$22,$23,$24,$25,$26,
-         $27,$28,$29,$30,$31,$32
+         $27,$28,$29,$30,$31,$32,
+         $33,$34,$35,$36,$37
        ) RETURNING *`,
       [
         nome, especie, chip, vacinas || null, doencas || null, entrada || null,
@@ -88,7 +90,8 @@ router.post('/', upload.single('foto'), async (req, res) => {
         tratamento_iniciado === 'true' || tratamento_iniciado === true,
         titular === 'true' || titular === true, box || null, motivo_entrada,
         motivo_volta || null, local_ocorrencia || null, concelho || null,
-        data_nascimento || null, raca || null, cor || null, foto
+        data_nascimento || null, raca || null, cor || null, foto,
+        nome_teste || null, produto_desparasitacao || null, data_adocao || null, adotante || null, data_regresso || null
       ]
     );
     res.status(201).json(rows[0]);
@@ -98,7 +101,7 @@ router.post('/', upload.single('foto'), async (req, res) => {
   }
 });
 
-// ────────── ATUALIZA animal (excepto foto) ──────────
+// ────────── ATUALIZA animal ──────────
 router.put('/:id', upload.none(), async (req, res) => {
   const {
     nome, especie, chip, vacinas, doencas, entrada, saida, observacoes,
@@ -106,7 +109,8 @@ router.put('/:id', upload.none(), async (req, res) => {
     esterilizado, desparasitado, produto_desparasitado, data_desparasitado,
     testes, data_testes, tratamento, tratamento_iniciado,
     titular, box, motivo_entrada, motivo_volta, local_ocorrencia,
-    concelho, data_nascimento, raca, cor
+    concelho, data_nascimento, raca, cor,
+    nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso
   } = req.body;
 
   try {
@@ -119,7 +123,8 @@ router.put('/:id', upload.none(), async (req, res) => {
       'testes=$19','data_testes=$20','tratamento=$21','tratamento_iniciado=$22',
       'titular=$23','box=$24','motivo_entrada=$25','motivo_volta=$26',
       'local_ocorrencia=$27','concelho=$28','data_nascimento=$29',
-      'raca=$30','cor=$31'
+      'raca=$30','cor=$31',
+      'nome_teste=$32','produto_desparasitacao=$33','data_adocao=$34','adotante=$35','data_regresso=$36'
     ];
 
     const params = [
@@ -131,9 +136,10 @@ router.put('/:id', upload.none(), async (req, res) => {
       produto_desparasitado || null, data_desparasitado || null,
       testes || null, data_testes || null, tratamento || null,
       tratamento_iniciado === 'true' || tratamento_iniciado === true,
-      titular === 'true' || titular === true,
-      box || null, motivo_entrada, motivo_volta || null, local_ocorrencia || null,
-      concelho || null, data_nascimento || null, raca || null, cor || null,
+      titular === 'true' || titular === true, box || null, motivo_entrada,
+      motivo_volta || null, local_ocorrencia || null, concelho || null,
+      data_nascimento || null, raca || null, cor || null,
+      nome_teste || null, produto_desparasitacao || null, data_adocao || null, adotante || null, data_regresso || null,
       req.params.id
     ];
 
@@ -180,8 +186,7 @@ router.put('/:id/box', async (req, res) => {
   }
 });
 
-/* ────────── REGRESSO de adotado ────────── */
-
+// ────────── REGRESSO de adotado ──────────
 router.put('/:id/regresso', async (req, res) => {
   const { id } = req.params;
   const { motivo_volta, data_regresso } = req.body;
@@ -189,10 +194,10 @@ router.put('/:id/regresso', async (req, res) => {
   try {
     const { rows } = await pool.query(
       `UPDATE animais
-         SET saida         = NULL,
-             motivo_saida  = NULL,
-             dados_adotante= NULL,
-             motivo_volta  = $1,
+         SET saida = NULL,
+             motivo_saida = NULL,
+             dados_adotante = NULL,
+             motivo_volta = $1,
              data_regresso = $2
        WHERE id = $3
        RETURNING *`,
