@@ -20,16 +20,22 @@ app.use(express.json());
 app.use('/animais/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Rotas
+const utilizadoresRouter = require('./routes/utilizadores');
+const authRoutes    = require('./routes/auth');
 const animaisRouter = require('./routes/animais');
 const vacinasRouter = require('./routes/vacinas');
 const boxesRouter   = require('./routes/boxes');
 const testesRouter = require('./routes/testes');
+const pedidosRouter = require('./routes/pedidos');
 
 // monta as rotas na ordem correta
+app.use('/utilizadores', utilizadoresRouter);
+app.use('/auth',        authRoutes); 
 app.use('/animais',      animaisRouter);
 app.use('/animais',      vacinasRouter);  
 app.use('/boxes',        boxesRouter);
 app.use('/animais', testesRouter);
+app.use('/pedidos-visita', pedidosRouter);
 
 // Endpoint base
 app.get('/', (_req, res) => {

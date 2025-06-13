@@ -18,27 +18,29 @@ export default function Boxes() {
   const totalPaginas = Math.ceil(animais.length / animaisPorPagina);
 
   // carrega nomes de boxes e contagem de animais por box
-  useEffect(() => {
-    async function fetchBoxesAndCounts() {
-      try {
-        const [boxesRes, animaisRes] = await Promise.all([
-          axios.get('http://localhost:3001/boxes/nome'),
-          axios.get('http://localhost:3001/animais')
-        ]);
-        setNomesBoxes(boxesRes.data);
+useEffect(() => {
+  async function fetchBoxesAndCounts() {
+    try {
+      const [boxesRes, animaisResRaw] = await Promise.all([
+        axios.get('http://localhost:3001/boxes/nome'),
+        axios.get('http://localhost:3001/animais')
+      ]);
 
-        // agrupa contagem por box
-        const counts = {};
-        animaisRes.data.forEach(a => {
-          if (a.box) counts[a.box] = (counts[a.box] || 0) + 1;
-        });
-        setContagens(counts);
-      } catch (err) {
-        console.error('Erro ao carregar boxes ou animais:', err);
-      }
+      const animaisSemSaida = animaisResRaw.data.filter(a => !a.saida);
+
+      setNomesBoxes(boxesRes.data);
+
+      const counts = {};
+      animaisSemSaida.forEach(a => {
+        if (a.box) counts[a.box] = (counts[a.box] || 0) + 1;
+      });
+      setContagens(counts);
+    } catch (err) {
+      console.error('Erro ao carregar boxes ou animais:', err);
     }
-    fetchBoxesAndCounts();
-  }, []);
+  }
+  fetchBoxesAndCounts();
+}, []);
 
   // carrega somente animais da box selecionada 
   useEffect(() => {
@@ -88,12 +90,12 @@ export default function Boxes() {
 
   return (
     <div>
-      <h2 className="text-center mb-4">Gestão de BOX's</h2>
+      <h2 className="text-left mb-4">📍 Gestão de BOX's</h2>
 
       {/* ---------------------------
            Mostra todas as boxes
          --------------------------- */}
-      <div className="d-flex flex-wrap gap-3 justify-content-center mb-5">
+      <div className="d-flex flex-wrap gap-3 justify-content-left mb-5">
         {nomesBoxes.map((nome, i) => (
           <Card
             key={i}
@@ -101,7 +103,7 @@ export default function Boxes() {
             className={nome === boxSelecionada ? 'border-primary shadow' : 'shadow-sm'}
             onClick={() => setBoxSelecionada(nome)}
           >
-            <Card.Body className="text-center">
+            <Card.Body className="text-left">
               <Card.Title className="mb-2">{nome}</Card.Title>
               <Badge bg="secondary">{contagens[nome] || 0} animais</Badge>
             </Card.Body>
@@ -112,7 +114,7 @@ export default function Boxes() {
       {/* ---------------------------
            Criação de nova box
          --------------------------- */}
-      <div className="d-flex flex-wrap gap-3 justify-content-center mb-4">
+      <div className="d-flex flex-wrap gap-3 justify-content-left mb-4">
         <input
           type="text"
           className="form-control w-auto"
@@ -129,8 +131,8 @@ export default function Boxes() {
          --------------------------- */}
       {boxSelecionada && (
         <>
-          <h4 className="mb-3 text-center">
-            Animais na box <strong>{boxSelecionada}</strong>
+          <h4 className="mb-3 text-left">
+            Animais na Box <strong>{boxSelecionada}</strong>
           </h4>
 
           <div className="row">

@@ -1,0 +1,49 @@
+.cabecalho {
+  background: linear-gradient(to right, #1e3c72, #2a5298);
+  color: white;
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo-titulo {
+  font-size: 1.8rem;
+  font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+
+.menu-navegacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.botao-menu {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: none;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: background 0.2s ease;
+}
+
+.botao-menu:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.botao-verde {
+  background-color: #28a745 !important;
+}
+
+.botao-amarelo {
+  background-color: #ffc107 !important;
+}
+
+.botao-vermelho {
+  background-color: #dc3545 !important;
+}

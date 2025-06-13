@@ -59,7 +59,7 @@ export default function HistoricoAnimais() {
 
   return (
     <div>
-      <h2 className="mb-3">Histórico de Animais</h2>
+      <h2 className="mb-3">📂 Histórico de Animais</h2>
 
       <div className="d-flex flex-wrap align-items-center gap-3 mb-4">
         <Form.Select

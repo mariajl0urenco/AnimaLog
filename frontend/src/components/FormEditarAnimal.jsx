@@ -12,7 +12,8 @@ export default function FormEditarAnimal() {
     esterilizado:false, data_esterilizacao:'',
     desparasitado:false, produto_desparasitado:'', data_desparasitado:'',
     tratamento:'', tratamento_iniciado:false,
-    titular:false, box:'', concelho:'', local_ocorrencia:''
+    titular:false, disponivel_adocao:false,
+    box:'', concelho:'', local_ocorrencia:''
   });
 
   const [boxes, setBoxes] = useState([]);
@@ -45,6 +46,7 @@ export default function FormEditarAnimal() {
           desparasitado: !!a.desparasitado,
           tratamento_iniciado: !!a.tratamento_iniciado,
           titular: !!a.titular,
+          disponivel_adocao: !!a.disponivel_adocao,
           vacinas: Array.isArray(vRes.data) ? vRes.data : [],
           testes: Array.isArray(tRes.data) ? tRes.data : []
         });
@@ -328,6 +330,25 @@ export default function FormEditarAnimal() {
         ))}
         <button type="button" className="btn btn-outline-success mt-2" onClick={addVacina}>+ Adicionar Vacina</button>
       </div>
+	  
+	  {/* Disponível para Adoção */}
+<h4 className="mt-4">Adoção</h4>
+<div className="section-box">
+  <div className="form-check mb-2">
+    <input
+      type="checkbox"
+      name="disponivel_adocao"
+      checked={formData.disponivel_adocao}
+      onChange={handleChange}
+      className="form-check-input"
+      id="check-disponivel-adocao"
+    />
+    <label htmlFor="check-disponivel-adocao" className="form-check-label">
+      Disponível para Adoção
+    </label>
+  </div>
+</div>
+
 
       {/* Fotografia */}
       <h4 className="mt-4">Fotografia</h4>

@@ -11,7 +11,7 @@ import './FichaAnimal.css';
 
 const cap = txt => txt ? txt.charAt(0).toUpperCase() + txt.slice(1) : 'N/D';
 
-export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualizado }) {
+export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualizado, tipo }) {
   const [vacinas, setVacinas] = useState([]);
   const [testes, setTestes] = useState([]);
   const [showHist, setShowHist] = useState(false);
@@ -26,12 +26,14 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
   const [adoptData, setAdoptData] = useState({ dados: '' });
   const [showFalec, setShowFalec] = useState(false);
   const [falecData, setFalecData] = useState({ data: '', motivo: '' });
+  const [disponivelAdocao, setDisponivelAdocao] = useState(false);
 
   useEffect(() => {
     if (animal && show) {
       axios.get(`http://localhost:3001/animais/${animal.id}/vacinas`).then(r => setVacinas(r.data)).catch(console.error);
       axios.get(`http://localhost:3001/animais/${animal.id}/testes`).then(r => setTestes(r.data)).catch(console.error);
       setObservacoes(animal.observacoes || '');
+	  setDisponivelAdocao(animal.disponivel_adocao || false);
     }
   }, [animal, show]);
 
@@ -50,6 +52,20 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
       alert("Observações atualizadas.");
     } catch (e) {
       alert('Erro ao guardar observações');
+      console.error(e);
+    }
+  };
+  
+    const atualizarDisponivelAdocao = async (novoEstado) => {
+    try {
+      setDisponivelAdocao(novoEstado);
+      await axios.put(`http://localhost:3001/animais/${animal.id}`, {
+        ...animal,
+        disponivel_adocao: novoEstado
+      });
+      onAtualizado?.();
+    } catch (e) {
+      alert('Erro ao atualizar estado de adoção');
       console.error(e);
     }
   };
@@ -154,20 +170,32 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
                 <Form.Control as="textarea" rows={3} value={observacoes} onChange={e => setObservacoes(e.target.value)} />
                 <Button variant="outline-secondary" size="sm" className="mt-2" onClick={guardarObservacoes}>Guardar Observações</Button>
               </Form.Group>
+			  
+			                <Form.Group className="mt-3">
+                <Form.Check
+                  type="checkbox"
+                  label="Disponível para Adoção"
+                  checked={disponivelAdocao}
+                  onChange={(e) => atualizarDisponivelAdocao(e.target.checked)}
+                />
+              </Form.Group>
             </div>
           </div>
         </Modal.Body>
 
-        <Modal.Footer className="justify-content-between">
-          <div>
-            <Button variant="success" className="me-2" onClick={() => setShowAdop(true)}>🏠 Adoção</Button>
-            <Button variant="dark" onClick={() => setShowFalec(true)}>🌈 Falecimento</Button>
-          </div>
-          <div>
-            <Button variant="danger" className="me-2" onClick={removerAnimal}>🗑️ Remover</Button>
-            <Button variant="primary" onClick={() => onEditar(animal.id)}>Editar</Button>
-          </div>
-        </Modal.Footer>
+<Modal.Footer className="justify-content-between">
+  <div>
+    <Button variant="success" className="me-2" onClick={() => setShowAdop(true)}>🏠 Adoção</Button>
+    <Button variant="dark" onClick={() => setShowFalec(true)}>🌈 Falecimento</Button>
+  </div>
+  <div>
+    <Button variant="danger" className="me-2" onClick={removerAnimal}>🗑️ Remover</Button>
+    {tipo === 'tecnico' && (
+      <Button variant="primary" onClick={() => onEditar(animal.id)}>Editar</Button>
+    )}
+  </div>
+</Modal.Footer>
+
       </Modal>
 
       {/* Modais externos */}

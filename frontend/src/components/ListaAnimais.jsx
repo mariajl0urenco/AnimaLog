@@ -15,6 +15,7 @@ export default function ListaAnimais() {
   const [sel, setSel]                 = useState(null);
   const [show, setShow]               = useState(false);
   const navigate = useNavigate();
+  const tipo = localStorage.getItem("tipo");
 
   const porPagina = 16;
 
@@ -52,7 +53,7 @@ export default function ListaAnimais() {
     <div>
       {/* cabeçalho + filtros */}
       <div className="d-flex flex-wrap gap-2 align-items-center mb-3">
-        <h2 className="mb-0 me-auto">Animais no Canil</h2>
+        <h2 className="mb-0 me-auto">🐕 Animais no Canil</h2>
 
         {/* pesquisa */}
         <input
@@ -143,6 +144,7 @@ export default function ListaAnimais() {
         onHide={() => setShow(false)}
         animal={sel}
         onEditar={id => navigate(`/editar-animal/${id}`)}
+		tipo={tipo}
         onRemover={id => {
           if (window.confirm('Tem a certeza que quer remover este animal?')) {
             axios.delete(`http://localhost:3001/animais/${id}`)

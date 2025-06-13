@@ -57,7 +57,8 @@ router.post('/', upload.single('foto'), async (req, res) => {
     testes, data_testes, tratamento, tratamento_iniciado,
     titular, box, motivo_entrada, motivo_volta, local_ocorrencia,
     concelho, data_nascimento, raca, cor,
-    nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso
+    nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
+    disponivel_adocao
   } = req.body;
   const foto = req.file ? req.file.filename : null;
 
@@ -70,14 +71,15 @@ router.post('/', upload.single('foto'), async (req, res) => {
          testes, data_testes, tratamento, tratamento_iniciado, titular, box,
          motivo_entrada, motivo_volta, local_ocorrencia, concelho, data_nascimento,
          raca, cor, foto,
-         nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso
+         nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
+         disponivel_adocao
        ) VALUES (
          $1,$2,$3,$4,$5,$6,$7,$8,
          $9,$10,$11,$12,$13,$14,
          $15,$16,$17,$18,$19,$20,
          $21,$22,$23,$24,$25,$26,
          $27,$28,$29,$30,$31,$32,
-         $33,$34,$35,$36,$37
+         $33,$34,$35,$36,$37,$38
        ) RETURNING *`,
       [
         nome, especie, chip, vacinas || null, doencas || null, entrada || null,
@@ -91,7 +93,8 @@ router.post('/', upload.single('foto'), async (req, res) => {
         titular === 'true' || titular === true, box || null, motivo_entrada,
         motivo_volta || null, local_ocorrencia || null, concelho || null,
         data_nascimento || null, raca || null, cor || null, foto,
-        nome_teste || null, produto_desparasitacao || null, data_adocao || null, adotante || null, data_regresso || null
+        nome_teste || null, produto_desparasitacao || null, data_adocao || null, adotante || null, data_regresso || null,
+        disponivel_adocao === 'true' || disponivel_adocao === true
       ]
     );
     res.status(201).json(rows[0]);
@@ -110,7 +113,8 @@ router.put('/:id', upload.none(), async (req, res) => {
     testes, data_testes, tratamento, tratamento_iniciado,
     titular, box, motivo_entrada, motivo_volta, local_ocorrencia,
     concelho, data_nascimento, raca, cor,
-    nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso
+    nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
+    disponivel_adocao
   } = req.body;
 
   try {
@@ -123,8 +127,8 @@ router.put('/:id', upload.none(), async (req, res) => {
       'testes=$19','data_testes=$20','tratamento=$21','tratamento_iniciado=$22',
       'titular=$23','box=$24','motivo_entrada=$25','motivo_volta=$26',
       'local_ocorrencia=$27','concelho=$28','data_nascimento=$29',
-      'raca=$30','cor=$31',
-      'nome_teste=$32','produto_desparasitacao=$33','data_adocao=$34','adotante=$35','data_regresso=$36'
+      'raca=$30','cor=$31','nome_teste=$32','produto_desparasitacao=$33',
+      'data_adocao=$34','adotante=$35','data_regresso=$36','disponivel_adocao=$37'
     ];
 
     const params = [
@@ -140,6 +144,7 @@ router.put('/:id', upload.none(), async (req, res) => {
       motivo_volta || null, local_ocorrencia || null, concelho || null,
       data_nascimento || null, raca || null, cor || null,
       nome_teste || null, produto_desparasitacao || null, data_adocao || null, adotante || null, data_regresso || null,
+      disponivel_adocao === 'true' || disponivel_adocao === true,
       req.params.id
     ];
 
@@ -223,6 +228,22 @@ router.delete('/:id', async (req, res) => {
   } catch (err) {
     console.error('Erro ao remover animal:', err);
     res.status(500).json({ erro: 'Erro ao remover animal' });
+  }
+});
+
+// ────────── LISTA ANIMAIS DISPONÍVEIS PARA ADOÇÃO ──────────
+router.get('/publico/adocao', async (_req, res) => {
+  try {
+    const resultado = await pool.query(`
+      SELECT id, nome, especie, foto, sexo, idade, esterilizado
+      FROM animais
+      WHERE disponivel_adocao = true AND saida IS NULL
+      ORDER BY entrada DESC
+    `);
+    res.json(resultado.rows);
+  } catch (err) {
+    console.error('Erro ao obter animais disponíveis para adoção:', err);
+    res.status(500).json({ erro: 'Erro interno do servidor' });
   }
 });
 
