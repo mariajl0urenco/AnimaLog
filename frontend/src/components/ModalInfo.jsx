@@ -9,7 +9,7 @@ export default function ModalInfo({ show, onHide }) {
       </Modal.Header>
       <Modal.Body>
         <p>
-          A <strong>AnimaLog</strong> é uma aplicação desenvolvida para facilitar a gestão de animais nos Centro de Recolha Oficial.
+          A <strong>AnimaLog</strong> é uma aplicação desenvolvida para facilitar a gestão de animais nos Centros de Recolha Oficial.
           Aqui pode consultar os animais disponíveis para adoção, agendar uma visita e aceder a informações úteis.
         </p>
         <hr />
