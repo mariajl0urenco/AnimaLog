@@ -57,16 +57,24 @@ useEffect(() => {
     })();
   }, [boxSelecionada]);
 
-  const criarNovaBox = () => {
-    const nome = novaBox.trim();
-    if (!nome) return;
-    if (!nomesBoxes.includes(nome)) {
-      setNomesBoxes(prev => [...prev, nome]);
-      setContagens(prev => ({ ...prev, [nome]: 0 }));
+const criarNovaBox = async () => {
+  const nome = novaBox.trim();
+  if (!nome) return;
+
+  try {
+    const res = await axios.post('https://animalog-backend.onrender.com/boxes', { nome });
+
+    if (res.data && res.data.nome) {
+      setNomesBoxes(prev => [...prev, res.data.nome]);
+      setContagens(prev => ({ ...prev, [res.data.nome]: 0 }));
+      setBoxSelecionada(res.data.nome);
     }
-    setBoxSelecionada(nome);
+
     setNovaBox('');
-  };
+  } catch (err) {
+    console.error('Erro ao criar nova box:', err);
+  }
+};
 
   const mudarAnimalDeBox = async (animalId, novaBoxName) => {
     try {
