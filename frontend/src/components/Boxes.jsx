@@ -22,8 +22,8 @@ useEffect(() => {
   async function fetchBoxesAndCounts() {
     try {
       const [boxesRes, animaisResRaw] = await Promise.all([
-        axios.get('http://localhost:3001/boxes/nome'),
-        axios.get('http://localhost:3001/animais')
+        axios.get('https://animalog-backend.onrender.com/boxes/nome'),
+        axios.get('https://animalog-backend.onrender.com/animais')
       ]);
 
       const animaisSemSaida = animaisResRaw.data.filter(a => !a.saida);
@@ -47,7 +47,7 @@ useEffect(() => {
     if (!boxSelecionada) return;
     (async () => {
       try {
-        const res = await axios.get('http://localhost:3001/animais');
+        const res = await axios.get('https://animalog-backend.onrender.com/animais');
         const filtrados = res.data.filter(a => a.box === boxSelecionada && !a.saida);
         setAnimais(filtrados);
         setPaginaAtual(0);
@@ -70,7 +70,7 @@ useEffect(() => {
 
   const mudarAnimalDeBox = async (animalId, novaBoxName) => {
     try {
-      await axios.put(`http://localhost:3001/animais/${animalId}/box`, { box: novaBoxName });
+      await axios.put(`https://animalog-backend.onrender.com/animais/${animalId}/box`, { box: novaBoxName });
       // atualiza lista e contagens
       setAnimais(curr => curr.filter(a => a.id !== animalId));
       setContagens(prev => {
@@ -142,7 +142,7 @@ useEffect(() => {
                   {animal.foto && (
                     <Card.Img
                       variant="top"
-                      src={`http://localhost:3001/animais/uploads/${animal.foto}`}
+                      src={`https://animalog-backend.onrender.com/animais/uploads/${animal.foto}`}
                       style={{ objectFit: 'cover', height: '180px' }}
                     />
                   )}

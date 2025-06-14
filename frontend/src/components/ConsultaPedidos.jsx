@@ -6,7 +6,7 @@ function ConsultaPedidos() {
   const [pedidos, setPedidos] = useState([]);
 
   const carregarPedidos = () => {
-    axios.get('http://localhost:3001/pedidos-visita')
+    axios.get('https://animalog-backend.onrender.com/pedidos-visita')
       .then(res => setPedidos(res.data))
       .catch(err => console.error('Erro ao buscar pedidos:', err));
   };
@@ -17,13 +17,13 @@ function ConsultaPedidos() {
 
   const eliminarPedido = (id) => {
     if (!window.confirm('Tem a certeza que deseja eliminar este pedido?')) return;
-    axios.delete(`http://localhost:3001/pedidos-visita/${id}`)
+    axios.delete(`https://animalog-backend.onrender.com/pedidos-visita/${id}`)
       .then(() => carregarPedidos())
       .catch(() => alert('Erro ao eliminar pedido.'));
   };
 
   const alterarEstado = (id, novoEstado) => {
-    axios.patch(`http://localhost:3001/pedidos-visita/${id}`, { estado: novoEstado })
+    axios.patch(`https://animalog-backend.onrender.com/pedidos-visita/${id}`, { estado: novoEstado })
       .then(() => carregarPedidos())
       .catch(() => alert('Erro ao alterar estado.'));
   };

@@ -19,7 +19,7 @@ function GestaoUtilizadores() {
 
   const carregarUtilizadores = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/auth/listar', {
+      const res = await axios.get('https://animalog-backend.onrender.com/auth/listar', {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUtilizadores(res.data);
@@ -39,7 +39,7 @@ function GestaoUtilizadores() {
 
     try {
       const res = await axios.post(
-        'http://localhost:3001/auth/criar-utilizador',
+        'https://animalog-backend.onrender.com/auth/criar-utilizador',
         { nome, email, password, tipo },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -54,7 +54,7 @@ function GestaoUtilizadores() {
   const apagarUtilizador = async (id) => {
     if (!window.confirm('Tem a certeza que deseja apagar este utilizador?')) return;
     try {
-      await axios.delete(`http://localhost:3001/auth/eliminar/${id}`, {
+      await axios.delete(`https://animalog-backend.onrender.com/auth/eliminar/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       carregarUtilizadores();
@@ -71,7 +71,7 @@ function GestaoUtilizadores() {
 
   const guardarEdicao = async () => {
     try {
-      await axios.put(`http://localhost:3001/auth/editar/${utilizadorAtual.id}`, {
+      await axios.put(`https://animalog-backend.onrender.com/auth/editar/${utilizadorAtual.id}`, {
         nome: utilizadorAtual.nome,
         email: utilizadorAtual.email,
         tipo: utilizadorAtual.tipo,

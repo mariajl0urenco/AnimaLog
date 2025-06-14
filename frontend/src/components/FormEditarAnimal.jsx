@@ -30,10 +30,10 @@ export default function FormEditarAnimal() {
     (async () => {
       try {
         const [aRes, vRes, tRes, bRes] = await Promise.all([
-          axios.get(`http://localhost:3001/animais/${id}`),
-          axios.get(`http://localhost:3001/animais/${id}/vacinas`),
-          axios.get(`http://localhost:3001/animais/${id}/testes`),
-          axios.get('http://localhost:3001/boxes/nome')
+          axios.get(`https://animalog-backend.onrender.com/animais/${id}`),
+          axios.get(`https://animalog-backend.onrender.com/animais/${id}/vacinas`),
+          axios.get(`https://animalog-backend.onrender.com/animais/${id}/testes`),
+          axios.get('https://animalog-backend.onrender.com/boxes/nome')
         ]);
         const a = aRes.data;
         setFormData({
@@ -108,23 +108,23 @@ export default function FormEditarAnimal() {
     e.preventDefault();
     try {
       const { vacinas, testes, ...animalData } = formData;
-      await axios.put(`http://localhost:3001/animais/${id}`, animalData);
+      await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, animalData);
 
-      await Promise.all(removidasVacinas.map(vId => axios.delete(`http://localhost:3001/animais/vacinas/${vId}`)));
-      await Promise.all(removidasTestes.map(tId => axios.delete(`http://localhost:3001/animais/testes/${tId}`)));
+      await Promise.all(removidasVacinas.map(vId => axios.delete(`https://animalog-backend.onrender.com/animais/vacinas/${vId}`)));
+      await Promise.all(removidasTestes.map(tId => axios.delete(`https://animalog-backend.onrender.com/animais/testes/${tId}`)));
 
       for (const vac of vacinas)
         if (!vac.id)
-          await axios.post(`http://localhost:3001/animais/${id}/vacinas`, vac);
+          await axios.post(`https://animalog-backend.onrender.com/animais/${id}/vacinas`, vac);
 
       for (const tst of testes)
         if (!tst.id)
-          await axios.post(`http://localhost:3001/animais/${id}/testes`, tst);
+          await axios.post(`https://animalog-backend.onrender.com/animais/${id}/testes`, tst);
 
       if (imgFinal instanceof Blob) {
         const fd = new FormData();
         fd.append('foto', imgFinal, 'animal.jpg');
-        await axios.put(`http://localhost:3001/animais/${id}/foto`, fd);
+        await axios.put(`https://animalog-backend.onrender.com/animais/${id}/foto`, fd);
       }
       alert('Animal atualizado com sucesso!');
       navigate('/');

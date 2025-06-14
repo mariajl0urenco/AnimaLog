@@ -13,7 +13,7 @@ function Login({ onLogin }) {
     e.preventDefault();
     setErro('');
     try {
-      const res = await axios.post('http://localhost:3001/auth/login', { email, password });
+      const res = await axios.post('https://animalog-backend.onrender.com/auth/login', { email, password });
       const { token, tipo } = res.data;
       localStorage.setItem('token', token);
       localStorage.setItem('tipo', tipo);

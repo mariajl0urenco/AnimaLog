@@ -18,7 +18,7 @@ function CriarUtilizador({ token }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/auth/criar-utilizador', formData, {
+      await axios.post('https://animalog-backend.onrender.com/auth/criar-utilizador', formData, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -13,7 +13,7 @@ function ModalPedidoVisita({ show, onHide, animais }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3001/pedidos-visita', {
+      await axios.post('https://animalog-backend.onrender.com/pedidos-visita', {
         id_animal: idAnimal,
         nome,
         email,

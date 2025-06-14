@@ -19,7 +19,7 @@ export default function HistoricoAnimais() {
   const [animalSelecionado, setAnimalSelecionado] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:3001/animais')
+    axios.get('https://animalog-backend.onrender.com/animais')
          .then(r => setAnimais(r.data))
          .catch(console.error);
   }, []);
@@ -43,7 +43,7 @@ export default function HistoricoAnimais() {
 
   const submeterRegresso = async () => {
     try {
-      await axios.put(`http://localhost:3001/animais/${sel.id}/regresso`, {
+      await axios.put(`https://animalog-backend.onrender.com/animais/${sel.id}/regresso`, {
         data_regresso: dataReg,
         motivo_volta: motivoReg
       });
@@ -90,7 +90,7 @@ export default function HistoricoAnimais() {
               <div className="card shadow-sm h-100 position-relative">
                 {a.foto && (
                   <img
-                    src={`http://localhost:3001/animais/uploads/${a.foto}`}
+                    src={`https://animalog-backend.onrender.com/animais/uploads/${a.foto}`}
                     className="card-img-top"
                     style={{ objectFit: 'cover', maxHeight: '250px' }}
                     alt={a.nome}
@@ -189,7 +189,7 @@ export default function HistoricoAnimais() {
           onHide={() => setMostrarFicha(false)}
           onEditar={(id) => window.location.href = `/editar/${id}`}
           onAtualizado={() => {
-            axios.get('http://localhost:3001/animais')
+            axios.get('https://animalog-backend.onrender.com/animais')
                  .then(r => setAnimais(r.data))
                  .catch(console.error);
           }}

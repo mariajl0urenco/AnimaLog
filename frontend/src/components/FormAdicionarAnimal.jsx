@@ -33,7 +33,7 @@ export default function FormAdicionarAnimal() {
 
   /* ───── Carrega lista de BOXs ───── */
   useEffect(() => {
-    axios.get('http://localhost:3001/boxes/nome')
+    axios.get('https://animalog-backend.onrender.com/boxes/nome')
       .then(res => setBoxes(res.data))
       .catch(console.error);
   }, []);
@@ -96,7 +96,7 @@ export default function FormAdicionarAnimal() {
     if (imagemFinal instanceof Blob) data.append('foto', imagemFinal, 'animal.jpg');
 
     try {
-      await axios.post('http://localhost:3001/animais', data);
+      await axios.post('https://animalog-backend.onrender.com/animais', data);
       alert('Animal adicionado com sucesso!');
       navigate('/');
     } catch (err) {

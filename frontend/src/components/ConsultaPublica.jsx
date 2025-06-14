@@ -16,7 +16,7 @@ function ConsultaPublica() {
   const offset = paginaAtual * animaisPorPagina;
 
   useEffect(() => {
-    axios.get('http://localhost:3001/animais/publico/adocao')
+    axios.get('https://animalog-backend.onrender.com/animais/publico/adocao')
       .then(res => setAnimais(res.data))
       .catch(err => console.error('Erro ao buscar animais:', err));
   }, []);
@@ -61,7 +61,7 @@ function ConsultaPublica() {
                 <div className="card h-100 shadow">
                   {animal.foto ? (
                     <img
-                      src={`http://localhost:3001/animais/uploads/${animal.foto}`}
+                      src={`https://animalog-backend.onrender.com/animais/uploads/${animal.foto}`}
                       alt={animal.nome}
                       className="card-img-top"
                       style={{ objectFit: 'cover', height: '250px' }}

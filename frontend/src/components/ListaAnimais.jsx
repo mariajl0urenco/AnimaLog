@@ -21,7 +21,7 @@ export default function ListaAnimais() {
 
   /* ── carrega lista ── */
   useEffect(() => {
-    axios.get('http://localhost:3001/animais')
+    axios.get('https://animalog-backend.onrender.com/animais')
          .then(r => setAnimais(r.data))
          .catch(console.error);
   }, []);
@@ -91,7 +91,7 @@ export default function ListaAnimais() {
               >
                 <img
                   src={a.foto
-                        ? `http://localhost:3001/animais/uploads/${a.foto}`
+                        ? `https://animalog-backend.onrender.com/animais/uploads/${a.foto}`
                         : imagemPlaceholder}
                   className="card-img-top"
                   alt={a.nome}
@@ -147,7 +147,7 @@ export default function ListaAnimais() {
 		tipo={tipo}
         onRemover={id => {
           if (window.confirm('Tem a certeza que quer remover este animal?')) {
-            axios.delete(`http://localhost:3001/animais/${id}`)
+            axios.delete(`https://animalog-backend.onrender.com/animais/${id}`)
                  .then(() => {
                    setAnimais(animais.filter(x => x.id !== id));
                    setShow(false);

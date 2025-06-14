@@ -30,8 +30,8 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
 
   useEffect(() => {
     if (animal && show) {
-      axios.get(`http://localhost:3001/animais/${animal.id}/vacinas`).then(r => setVacinas(r.data)).catch(console.error);
-      axios.get(`http://localhost:3001/animais/${animal.id}/testes`).then(r => setTestes(r.data)).catch(console.error);
+      axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`).then(r => setVacinas(r.data)).catch(console.error);
+      axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`).then(r => setTestes(r.data)).catch(console.error);
       setObservacoes(animal.observacoes || '');
 	  setDisponivelAdocao(animal.disponivel_adocao || false);
     }
@@ -44,7 +44,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
 
   const guardarObservacoes = async () => {
     try {
-      await axios.put(`http://localhost:3001/animais/${animal.id}`, {
+      await axios.put(`https://animalog-backend.onrender.com/animais/${animal.id}`, {
         ...animal,
         observacoes
       });
@@ -59,7 +59,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
     const atualizarDisponivelAdocao = async (novoEstado) => {
     try {
       setDisponivelAdocao(novoEstado);
-      await axios.put(`http://localhost:3001/animais/${animal.id}`, {
+      await axios.put(`https://animalog-backend.onrender.com/animais/${animal.id}`, {
         ...animal,
         disponivel_adocao: novoEstado
       });
@@ -73,7 +73,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
   const removerAnimal = async () => {
     if (!window.confirm("Tens a certeza que queres remover este animal?")) return;
     try {
-      await axios.delete(`http://localhost:3001/animais/${animal.id}`);
+      await axios.delete(`https://animalog-backend.onrender.com/animais/${animal.id}`);
       onAtualizado?.();
       onHide();
     } catch (err) {
@@ -84,7 +84,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
 
   const enviarAdopcao = async () => {
     try {
-      await axios.put(`http://localhost:3001/animais/${animal.id}`, {
+      await axios.put(`https://animalog-backend.onrender.com/animais/${animal.id}`, {
         ...animal,
         saida: new Date().toISOString().slice(0,10),
         motivo_saida: 'adocao',
@@ -101,7 +101,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
 
   const enviarFalecimento = async () => {
     try {
-      await axios.put(`http://localhost:3001/animais/${animal.id}`, {
+      await axios.put(`https://animalog-backend.onrender.com/animais/${animal.id}`, {
         ...animal,
         saida: falecData.data,
         motivo_saida: 'falecimento',
@@ -127,7 +127,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
           <div className="row">
             <div className="col-md-4 mb-3">
               <img
-                src={animal.foto ? `http://localhost:3001/animais/uploads/${animal.foto}` : imagemPlaceholder}
+                src={animal.foto ? `https://animalog-backend.onrender.com/animais/uploads/${animal.foto}` : imagemPlaceholder}
                 alt={animal.nome}
                 className="img-fluid rounded shadow-sm"
               />
@@ -202,18 +202,18 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
       <HistoricoVacinas show={showHist} vacinas={vacinas} onHide={() => setShowHist(false)} />
       <HistoricoTestes show={showHistTestes} testes={testes} onHide={() => setShowHistTestes(false)} onEditar={t => { setTesteSelecionado(t); setShowEditTeste(true); }} />
       <AdicionarVacina show={showAddVacina} onHide={() => setShowAddVacina(false)} onGuardar={async v => {
-        await axios.post(`http://localhost:3001/animais/${animal.id}/vacinas`, v);
-        const r = await axios.get(`http://localhost:3001/animais/${animal.id}/vacinas`);
+        await axios.post(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`, v);
+        const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`);
         setVacinas(r.data);
       }} />
       <AdicionarTeste show={showAddTeste} onHide={() => setShowAddTeste(false)} onGuardar={async t => {
-        await axios.post(`http://localhost:3001/animais/${animal.id}/testes`, t);
-        const r = await axios.get(`http://localhost:3001/animais/${animal.id}/testes`);
+        await axios.post(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`, t);
+        const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`);
         setTestes(r.data);
       }} />
       <EditarTeste show={showEditTeste} teste={testeSelecionado} onHide={() => setShowEditTeste(false)} onGuardar={async t => {
-        await axios.put(`http://localhost:3001/animais/testes/${t.id}`, t);
-        const r = await axios.get(`http://localhost:3001/animais/${animal.id}/testes`);
+        await axios.put(`https://animalog-backend.onrender.com/animais/testes/${t.id}`, t);
+        const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`);
         setTestes(r.data);
       }} />
 	  
