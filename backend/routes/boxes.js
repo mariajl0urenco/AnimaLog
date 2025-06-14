@@ -4,13 +4,8 @@ const router  = express.Router();
 const { Pool } = require('pg');
 require('dotenv').config();
 
-const pool = new Pool({
-  host:     process.env.PGHOST,
-  user:     process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  port:     process.env.PGPORT
-});
+const pool = require('../db');
+
 
 // GET /boxes         
 router.get('/', async (_req, res) => {
