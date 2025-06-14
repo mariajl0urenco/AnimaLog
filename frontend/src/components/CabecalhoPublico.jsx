@@ -10,7 +10,7 @@ export default function CabecalhoPublico({ onAgendarVisita }) {
   return (
     <div className="p-4 mb-4 rounded shadow-sm bg-light bg-opacity-75">
       <div className="d-flex justify-content-center mb-3">
-        <img src={logo} alt="Animalog" style={{ height: '250px' }} />
+        <img src={logo} alt="Animalog" style={{ height: '200px' }} />
       </div>
 <hr />
       <div className="d-flex justify-content-center mb-3 gap-2 flex-wrap">
