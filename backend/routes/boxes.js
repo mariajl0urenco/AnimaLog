@@ -1,10 +1,8 @@
 // routes/boxes.js
 const express = require('express');
 const router  = express.Router();
-const { Pool } = require('pg');
-require('dotenv').config();
-
 const pool = require('../db');
+require('dotenv').config();
 
 
 // GET /boxes         

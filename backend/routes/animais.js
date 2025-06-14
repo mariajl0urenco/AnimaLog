@@ -1,18 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const { Pool } = require('pg');
+const pool = require('../db');
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
-
-// ────────── Base de dados ──────────
-const pool = new Pool({
-  host: process.env.PGHOST,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
-  port: process.env.PGPORT
-});
 
 // ────────── Multer (uploads) ──────────
 const storage = multer.diskStorage({
