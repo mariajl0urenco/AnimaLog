@@ -48,4 +48,19 @@ router.post('/', async (req, res) => {
   }
 });
 
+// DELETE /boxes/:nome
+router.delete('/:nome', async (req, res) => {
+  const { nome } = req.params;
+  try {
+    const { rowCount } = await pool.query('DELETE FROM boxes WHERE nome = $1', [nome]);
+    if (rowCount === 0) {
+      return res.status(404).json({ erro: 'Box não encontrada' });
+    }
+    res.json({ mensagem: 'Box apagada com sucesso' });
+  } catch (err) {
+    console.error('Erro ao apagar box:', err);
+    res.status(500).json({ erro: 'Erro ao apagar box' });
+  }
+});
+
 module.exports = router;
