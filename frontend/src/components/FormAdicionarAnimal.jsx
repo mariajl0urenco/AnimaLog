@@ -88,7 +88,7 @@ const handleSubmit = async e => {
   }
 
   try {
-    let urlFoto = '';
+    let urlFoto = null;
 
     if (imagemFinal instanceof Blob) {
       const { createClient } = await import('@supabase/supabase-js');
@@ -114,10 +114,13 @@ const handleSubmit = async e => {
     }
 
     const finalData = {
-      ...formData,
-      foto: urlFoto,
-      vacinas: JSON.stringify(formData.vacinas)
-    };
+  ...formData,
+  vacinas: JSON.stringify(formData.vacinas)
+};
+
+if (urlFoto) {
+  finalData.foto = urlFoto;
+}
 
     await axios.post('https://animalog-backend.onrender.com/animais', finalData);
 
