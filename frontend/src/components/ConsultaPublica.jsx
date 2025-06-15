@@ -60,7 +60,11 @@ function ConsultaPublica() {
               <div key={animal.id} className="col-12 col-sm-6 col-md-3 mb-4">
                 <div className="card h-100 shadow">
 <img
-  src={animal.foto || '/assets/sem-foto.jpg'}
+  src={
+    animal.foto && animal.foto.startsWith('http')
+      ? animal.foto
+      : '/assets/sem-foto.jpg'
+  }
   alt={animal.nome}
   onError={(e) => {
     e.target.onerror = null;
@@ -69,6 +73,7 @@ function ConsultaPublica() {
   className="card-img-top"
   style={{ objectFit: 'cover', height: '250px' }}
 />
+
                   <div className="card-body">
                     <h5 className="card-title">{animal.nome}</h5>
                     <p className="card-text">
