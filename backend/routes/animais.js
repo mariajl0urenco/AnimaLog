@@ -51,7 +51,7 @@ async function uploadFotoParaSupabase(file) {
 }
 
 // ────────── CRIA novo animal ──────────
-router.post('/', upload.single('foto'), async (req, res) => {
+router.post('/', async (req, res) => {
   const {
     nome, especie, chip, vacinas, doencas, entrada, saida, observacoes,
     motivo_saida, dados_adotante, comportamento, peso, sexo, idade,
@@ -63,9 +63,8 @@ router.post('/', upload.single('foto'), async (req, res) => {
     disponivel_adocao
   } = req.body;
 
-  let foto = null;
+  const foto = req.body.foto || null;
   try {
-    if (req.file) foto = await uploadFotoParaSupabase(req.file);
 
     const { rows } = await pool.query(
       `INSERT INTO animais (
