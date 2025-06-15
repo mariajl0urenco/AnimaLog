@@ -90,13 +90,22 @@ export default function ListaAnimais() {
                 onClick={() => abreFicha(a)}
               >
                 <img
-                  src={a.foto
-                        ? `https://animalog-backend.onrender.com/animais/uploads/${a.foto}`
-                        : imagemPlaceholder}
-                  className="card-img-top"
-                  alt={a.nome}
-                  style={{ objectFit: 'cover', height: '180px' }}
-                />
+  src={
+    a.foto
+      ? a.foto.startsWith('http')
+        ? a.foto
+        : `https://animalog-backend.onrender.com/animais/uploads/${a.foto}`
+      : imagemPlaceholder
+  }
+  className="card-img-top"
+  alt={a.nome}
+  style={{ objectFit: 'cover', height: '180px' }}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = imagemPlaceholder;
+  }}
+/>
+
                 <div className="card-body">
                   <h5 className="card-title mb-0">{a.nome}</h5>
                   <h6 className="card-subtitle text-muted mb-2 text-capitalize">

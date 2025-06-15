@@ -88,22 +88,66 @@ export default function FormAdicionarAnimal() {
     }
 
     // prepara FormData multipart
-    const data = new FormData();
-    Object.entries(formData).forEach(([key, val]) => {
-      if (key === 'vacinas') data.append('vacinas', JSON.stringify(val));
-      else data.append(key, val);
-    });
-    if (imagemFinal instanceof Blob) data.append('foto', imagemFinal, 'animal.jpg');
+const handleSubmit = async e => {
+  e.preventDefault();
 
-    try {
-      await axios.post('https://animalog-backend.onrender.com/animais', data);
-      alert('Animal adicionado com sucesso!');
-      navigate('/');
-    } catch (err) {
-      console.error(err);
-      alert('Erro ao guardar animal.');
+  if (
+    !formData.nome.trim() ||
+    !formData.especie ||
+    !formData.chip ||
+    !formData.entrada ||
+    !formData.motivo_entrada
+  ) {
+    alert('Preenche Nome, Espécie, Chip, Data de Entrada e Motivo de Entrada.');
+    return;
+  }
+  if (formData.chip.length !== 15) {
+    alert('O número de chip deve ter exatamente 15 dígitos.');
+    return;
+  }
+
+  try {
+    let urlFoto = '';
+
+    if (imagemFinal instanceof Blob) {
+      const { createClient } = await import('@supabase/supabase-js');
+      const supabase = createClient(
+        import.meta.env.VITE_SUPABASE_URL,
+        import.meta.env.VITE_SUPABASE_SERVICE_KEY
+      );
+
+      const nomeFicheiro = `animal_${formData.chip}_${Date.now()}.jpg`;
+
+      const { error: uploadError } = await supabase
+        .storage
+        .from('fotos-animais')
+        .upload(nomeFicheiro, imagemFinal, {
+          contentType: 'image/jpeg',
+          upsert: true
+        });
+
+      if (uploadError) throw uploadError;
+
+      const { data } = supabase.storage.from('fotos-animais').getPublicUrl(nomeFicheiro);
+      urlFoto = data.publicUrl;
     }
-  };
+
+    const finalData = {
+      ...formData,
+      foto: urlFoto,
+      vacinas: JSON.stringify(formData.vacinas)
+    };
+
+    await axios.post('https://animalog-backend.onrender.com/animais', finalData);
+
+    alert('Animal adicionado com sucesso!');
+    navigate('/');
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao guardar animal.');
+  }
+};
+
 
   /* ───── Render ───── */
   return (
