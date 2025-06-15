@@ -68,26 +68,7 @@ export default function FormAdicionarAnimal() {
   };
 
   /* ───── SUBMIT ───── */
-  const handleSubmit = async e => {
-    e.preventDefault();
 
-    // validações mínimas
-    if (
-      !formData.nome.trim() ||
-      !formData.especie ||
-      !formData.chip ||
-      !formData.entrada ||
-      !formData.motivo_entrada
-    ) {
-      alert('Preenche Nome, Espécie, Chip, Data de Entrada e Motivo de Entrada.');
-      return;
-    }
-    if (formData.chip.length !== 15) {
-      alert('O número de chip deve ter exatamente 15 dígitos.');
-      return;
-    }
-
-    // prepara FormData multipart
 const handleSubmit = async e => {
   e.preventDefault();
 
