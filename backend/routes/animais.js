@@ -4,6 +4,7 @@ const pool = require('../db');
 const multer = require('multer');
 const path = require('path');
 require('dotenv').config();
+const toBool = (val) => String(val).toLowerCase() === 'true';
 
 // ────────── Multer (uploads) ──────────
 const storage = multer.diskStorage({
@@ -59,9 +60,9 @@ router.post('/', upload.single('foto'), async (req, res) => {
          nome, especie, chip, vacinas, doencas, entrada, saida, observacoes,
          motivo_saida, dados_adotante, comportamento, peso, sexo, idade,
          esterilizado, desparasitado, produto_desparasitado, data_desparasitado,
-         testes, data_testes, tratamento, tratamento_iniciado, titular, box,
-         motivo_entrada, motivo_volta, local_ocorrencia, concelho, data_nascimento,
-         raca, cor, foto,
+         testes, data_testes, tratamento, tratamento_iniciado,
+         titular, box, motivo_entrada, motivo_volta, local_ocorrencia,
+         concelho, data_nascimento, raca, cor, foto,
          nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
          disponivel_adocao
        ) VALUES (
@@ -76,16 +77,14 @@ router.post('/', upload.single('foto'), async (req, res) => {
         nome, especie, chip, vacinas || null, doencas || null, entrada || null,
         saida || null, observacoes || null, motivo_saida || null,
         dados_adotante || null, comportamento || null, peso || null, sexo || null,
-        idade || null, esterilizado === 'true' || esterilizado === true,
-        desparasitado === 'true' || desparasitado === true,
+        idade || null, toBool(esterilizado), toBool(desparasitado),
         produto_desparasitado || null, data_desparasitado || null,
         testes || null, data_testes || null, tratamento || null,
-        tratamento_iniciado === 'true' || tratamento_iniciado === true,
-        titular === 'true' || titular === true, box || null, motivo_entrada,
+        toBool(tratamento_iniciado), toBool(titular), box || null, motivo_entrada,
         motivo_volta || null, local_ocorrencia || null, concelho || null,
         data_nascimento || null, raca || null, cor || null, foto,
-        nome_teste || null, produto_desparasitacao || null, data_adocao || null, adotante || null, data_regresso || null,
-        disponivel_adocao === 'true' || disponivel_adocao === true
+        nome_teste || null, produto_desparasitacao || null, data_adocao || null,
+        adotante || null, data_regresso || null, toBool(disponivel_adocao)
       ]
     );
     res.status(201).json(rows[0]);
@@ -126,16 +125,14 @@ router.put('/:id', upload.none(), async (req, res) => {
       nome, especie, chip, vacinas || null, doencas || null,
       entrada || null, saida || null, observacoes || null, motivo_saida || null,
       dados_adotante || null, comportamento || null, peso || null, sexo || null,
-      idade || null, esterilizado === 'true' || esterilizado === true,
-      desparasitado === 'true' || desparasitado === true,
+      idade || null, toBool(esterilizado), toBool(desparasitado),
       produto_desparasitado || null, data_desparasitado || null,
       testes || null, data_testes || null, tratamento || null,
-      tratamento_iniciado === 'true' || tratamento_iniciado === true,
-      titular === 'true' || titular === true, box || null, motivo_entrada,
+      toBool(tratamento_iniciado), toBool(titular), box || null, motivo_entrada,
       motivo_volta || null, local_ocorrencia || null, concelho || null,
       data_nascimento || null, raca || null, cor || null,
       nome_teste || null, produto_desparasitacao || null, data_adocao || null, adotante || null, data_regresso || null,
-      disponivel_adocao === 'true' || disponivel_adocao === true,
+      toBool(disponivel_adocao),
       req.params.id
     ];
 
@@ -151,6 +148,7 @@ router.put('/:id', upload.none(), async (req, res) => {
     res.status(500).json({ erro: 'Erro ao editar animal' });
   }
 });
+
 
 // ────────── ATUALIZA somente a FOTO ──────────
 router.put('/:id/foto', upload.single('foto'), async (req, res) => {
