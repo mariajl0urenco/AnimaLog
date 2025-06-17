@@ -3,18 +3,12 @@ const router = express.Router();
 const pool = require('../db');
 const multer = require('multer');
 const path = require('path');
+const cloudinary = require('../cloudinary');
 require('dotenv').config();
 const toBool = (val) => String(val).toLowerCase() === 'true';
 
-// ────────── Multer (uploads) ──────────
-const storage = multer.diskStorage({
-  destination: (_req, _file, cb) => cb(null, 'uploads/'),
-  filename: (_req, file, cb) => {
-    const ext = path.extname(file.originalname);
-    const nome = Date.now() + '-' + Math.round(Math.random() * 1e9) + ext;
-    cb(null, nome);
-  }
-});
+// ────────── Multer (memória para Cloudinary) ──────────
+const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
 // ────────── LISTA todos ──────────
@@ -52,7 +46,19 @@ router.post('/', upload.single('foto'), async (req, res) => {
     nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
     disponivel_adocao
   } = req.body;
-  const foto = req.file ? req.file.filename : null;
+
+  let foto = null;
+  if (req.file) {
+    const bufferStream = require('streamifier').createReadStream(req.file.buffer);
+    const resultado = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream({ folder: 'animais' }, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+      bufferStream.pipe(stream);
+    });
+    foto = resultado.secure_url;
+  }
 
   try {
     const { rows } = await pool.query(
@@ -93,6 +99,7 @@ router.post('/', upload.single('foto'), async (req, res) => {
     res.status(500).json({ erro: 'Erro ao adicionar animal' });
   }
 });
+
 
 // ────────── ATUALIZA animal ──────────
 router.put('/:id', upload.none(), async (req, res) => {
@@ -150,14 +157,25 @@ router.put('/:id', upload.none(), async (req, res) => {
 });
 
 
-// ────────── ATUALIZA somente a FOTO ──────────
+// ────────── ATUALIZA somente a FOTO (com Cloudinary) ──────────
 router.put('/:id/foto', upload.single('foto'), async (req, res) => {
   if (!req.file) return res.status(400).json({ erro: 'Foto não enviada' });
+
   try {
+    const bufferStream = require('streamifier').createReadStream(req.file.buffer);
+    const resultado = await new Promise((resolve, reject) => {
+      const stream = cloudinary.uploader.upload_stream({ folder: 'animais' }, (err, result) => {
+        if (err) return reject(err);
+        resolve(result);
+      });
+      bufferStream.pipe(stream);
+    });
+
     const { rows } = await pool.query(
       'UPDATE animais SET foto=$1 WHERE id=$2 RETURNING *',
-      [req.file.filename, req.params.id]
+      [resultado.secure_url, req.params.id]
     );
+
     if (!rows.length) return res.status(404).json({ erro: 'Animal não encontrado' });
     res.json(rows[0]);
   } catch (err) {
@@ -165,6 +183,7 @@ router.put('/:id/foto', upload.single('foto'), async (req, res) => {
     res.status(500).json({ erro: 'Erro ao atualizar foto' });
   }
 });
+
 
 // ────────── MUDA BOX ──────────
 router.put('/:id/box', async (req, res) => {
