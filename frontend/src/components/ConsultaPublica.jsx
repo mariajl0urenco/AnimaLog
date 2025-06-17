@@ -60,8 +60,7 @@ function ConsultaPublica() {
               <div key={animal.id} className="col-12 col-sm-6 col-md-3 mb-4">
                 <div className="card h-100 shadow">
 <img
-  src={
-    animal.foto && animal.foto.startsWith('http')
+  src={animal.foto?.startsWith('http')
       ? animal.foto
       : '/assets/sem-foto.jpg'
   }

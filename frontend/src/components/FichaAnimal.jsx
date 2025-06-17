@@ -127,7 +127,9 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
 		<div className="row">
   <div className="col-md-4 mb-3">
     <img
-      src={animal.foto || imagemPlaceholder}
+  src={animal.foto?.startsWith('http')
+    ? animal.foto
+    : imagemPlaceholder}
       alt={animal.nome}
       className="img-fluid rounded shadow-sm"
       onError={(e) => {
