@@ -46,7 +46,7 @@ async function uploadFotoParaSupabase(file) {
     });
 
   if (error) throw error;
-  const url = `${process.env.SUPABASE_URL}/storage/v1/object/public/fotos-animais/${nome}?ts=${Date.now()}`;´
+  const url = `${process.env.SUPABASE_URL}/storage/v1/object/public/fotos-animais/${nome}?ts=${Date.now()}`;
   return url;
 }
 
