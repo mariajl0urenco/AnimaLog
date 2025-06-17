@@ -83,7 +83,8 @@ export default function ListaAnimais() {
         {visiveis.length === 0 ? (
           <p className="text-muted">Nenhum animal encontrado.</p>
         ) : (
-visiveis.map(a => {
+{visiveis.map(a => {
+
   return (
     <div className="col-12 col-sm-6 col-md-3 mb-4" key={a.id}>
       <div
@@ -104,8 +105,7 @@ visiveis.map(a => {
           </h6>
           <p className="card-text small">
             <strong>Chip:</strong> {a.chip}<br />
-            <strong>Género:</strong>{' '}
-            <span className="text-capitalize">{a.sexo || 'N/D'}</span><br />
+            <strong>Género:</strong> <span className="text-capitalize">{a.sexo || 'N/D'}</span><br />
             <strong>Box:</strong> {a.box || 'N/D'}<br />
             <strong>Idade:</strong> {a.idade || 'N/D'}<br />
             <strong>Entrada:</strong> {a.entrada?.slice(0, 10) || 'N/D'}<br />
@@ -116,9 +116,8 @@ visiveis.map(a => {
       </div>
     </div>
   );
-})
+})}
 
-      </div>
 
       {/* paginação */}
       {totalPaginas > 1 && (
