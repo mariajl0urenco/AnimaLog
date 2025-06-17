@@ -175,10 +175,15 @@ const criarNovaBox = async () => {
                 <Card className="h-100 shadow-sm">
                   {animal.foto && (
                     <Card.Img
-                      variant="top"
-                      src={`https://animalog-backend.onrender.com/animais/uploads/${animal.foto}`}
-                      style={{ objectFit: 'cover', height: '180px' }}
-                    />
+  variant="top"
+  src={animal.foto?.startsWith('http') ? animal.foto : require('../assets/sem-foto.jpg')}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = require('../assets/sem-foto.jpg');
+  }}
+  style={{ objectFit: 'cover', height: '180px' }}
+/>
+
                   )}
                   <Card.Body>
                     <Card.Title>{animal.nome}</Card.Title>

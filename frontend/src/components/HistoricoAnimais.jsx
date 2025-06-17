@@ -90,11 +90,16 @@ export default function HistoricoAnimais() {
               <div className="card shadow-sm h-100 position-relative">
                 {a.foto && (
                   <img
-                    src={`https://animalog-backend.onrender.com/animais/uploads/${a.foto}`}
-                    className="card-img-top"
-                    style={{ objectFit: 'cover', maxHeight: '250px' }}
-                    alt={a.nome}
-                  />
+  src={a.foto?.startsWith('http') ? a.foto : require('../assets/sem-foto.jpg')}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = require('../assets/sem-foto.jpg');
+  }}
+  className="card-img-top"
+  style={{ objectFit: 'cover', maxHeight: '250px' }}
+  alt={a.nome}
+/>
+
                 )}
                 {badge(a.motivo_saida)}
 

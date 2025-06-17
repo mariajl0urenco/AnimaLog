@@ -61,11 +61,16 @@ function ConsultaPublica() {
                 <div className="card h-100 shadow">
                   {animal.foto ? (
                     <img
-                      src={`https://animalog-backend.onrender.com/animais/uploads/${animal.foto}`}
-                      alt={animal.nome}
-                      className="card-img-top"
-                      style={{ objectFit: 'cover', height: '250px' }}
-                    />
+  src={animal.foto?.startsWith('http') ? animal.foto : '/assets/sem-foto.jpg'}
+  alt={animal.nome}
+  className="card-img-top"
+  style={{ objectFit: 'cover', height: '250px' }}
+  onError={(e) => {
+    e.target.onerror = null;
+    e.target.src = '/assets/sem-foto.jpg';
+  }}
+/>
+
                   ) : (
                     <div className="bg-secondary text-white d-flex justify-content-center align-items-center" style={{ height: '250px' }}>
                       Sem foto
