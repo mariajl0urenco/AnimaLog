@@ -16,6 +16,7 @@ export default function ListaAnimais() {
   const [show, setShow]               = useState(false);
   const navigate = useNavigate();
   const tipo = localStorage.getItem("tipo");
+  const imagemFinal = a.foto?.trim().startsWith('http') ? a.foto : imagemPlaceholder;
 
   const porPagina = 16;
 
@@ -82,46 +83,42 @@ export default function ListaAnimais() {
         {visiveis.length === 0 ? (
           <p className="text-muted">Nenhum animal encontrado.</p>
         ) : (
-          visiveis.map(a => (
-            <div className="col-12 col-sm-6 col-md-3 mb-4" key={a.id}>
-              <div
-                className="card h-100 shadow-sm"
-                style={{ cursor: 'pointer' }}
-                onClick={() => abreFicha(a)}
-              >
-                <img
-                  src={
-  a.foto && a.foto.trim().startsWith('http')
-    ? a.foto
-    : imagemPlaceholder
-}
+visiveis.map(a => {
+  const imagemFinal = a.foto?.trim().startsWith('http') ? a.foto : imagemPlaceholder;
+  return (
+    <div className="col-12 col-sm-6 col-md-3 mb-4" key={a.id}>
+      <div
+        className="card h-100 shadow-sm"
+        style={{ cursor: 'pointer' }}
+        onClick={() => abreFicha(a)}
+      >
+        <img
+          src={imagemFinal}
+          className="card-img-top"
+          alt={a.nome}
+          style={{ objectFit: 'cover', height: '180px' }}
+        />
+        <div className="card-body">
+          <h5 className="card-title mb-0">{a.nome}</h5>
+          <h6 className="card-subtitle text-muted mb-2 text-capitalize">
+            {a.especie}
+          </h6>
+          <p className="card-text small">
+            <strong>Chip:</strong> {a.chip}<br />
+            <strong>Género:</strong>{' '}
+            <span className="text-capitalize">{a.sexo || 'N/D'}</span><br />
+            <strong>Box:</strong> {a.box || 'N/D'}<br />
+            <strong>Idade:</strong> {a.idade || 'N/D'}<br />
+            <strong>Entrada:</strong> {a.entrada?.slice(0, 10) || 'N/D'}<br />
+            <strong>Esterilizado:</strong> {a.esterilizado ? 'Sim' : 'Não'}<br />
+            <strong>Desparasitado:</strong> {a.desparasitado ? 'Sim' : 'Não'}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+})
 
-
-                  className="card-img-top"
-                  alt={a.nome}
-                  style={{ objectFit: 'cover', height: '180px' }}
-                />
-                <div className="card-body">
-                  <h5 className="card-title mb-0">{a.nome}</h5>
-                  <h6 className="card-subtitle text-muted mb-2 text-capitalize">
-                    {a.especie}
-                  </h6>
-
-                  <p className="card-text small">
-                    <strong>Chip:</strong> {a.chip}<br />
-                    <strong>Género:</strong>{' '}
-                    <span className="text-capitalize">{a.sexo || 'N/D'}</span><br />
-                    <strong>Box:</strong> {a.box || 'N/D'}<br />
-                    <strong>Idade:</strong> {a.idade || 'N/D'}<br />
-                    <strong>Entrada:</strong> {a.entrada?.slice(0, 10) || 'N/D'}<br />
-                    <strong>Esterilizado:</strong> {a.esterilizado ? 'Sim' : 'Não'}<br />
-                    <strong>Desparasitado:</strong> {a.desparasitado ? 'Sim' : 'Não'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          ))
-        )}
       </div>
 
       {/* paginação */}
