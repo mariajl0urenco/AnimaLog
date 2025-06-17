@@ -84,7 +84,6 @@ export default function ListaAnimais() {
           <p className="text-muted">Nenhum animal encontrado.</p>
         ) : (
 visiveis.map(a => {
-  const imagemFinal = a.foto?.trim().startsWith('http') ? a.foto : imagemPlaceholder;
   return (
     <div className="col-12 col-sm-6 col-md-3 mb-4" key={a.id}>
       <div
