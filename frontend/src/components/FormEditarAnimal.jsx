@@ -122,34 +122,10 @@ export default function FormEditarAnimal() {
           await axios.post(`https://animalog-backend.onrender.com/animais/${id}/testes`, tst);
 
       if (imgFinal instanceof Blob) {
-  const { createClient } = await import('@supabase/supabase-js');
-  const supabase = createClient(
-    import.meta.env.VITE_SUPABASE_URL,
-    import.meta.env.VITE_SUPABASE_SERVICE_KEY
-  );
-
-  const nomeFicheiro = `animal_${id}_${Date.now()}.jpg`;
-
-  const { error: uploadError } = await supabase
-    .storage
-    .from('fotos-animais')
-    .upload(nomeFicheiro, imgFinal, {
-      contentType: 'image/jpeg',
-      upsert: true
-    });
-
-  if (uploadError) throw uploadError;
-
-  const { data } = supabase.storage.from('fotos-animais').getPublicUrl(nomeFicheiro);
-
-  await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, {
-    ...formData,
-    foto: data.publicUrl
-  });
-} else {
-  await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, formData);
-}
-
+        const fd = new FormData();
+        fd.append('foto', imgFinal, 'animal.jpg');
+        await axios.put(`https://animalog-backend.onrender.com/animais/${id}/foto`, fd);
+      }
       alert('Animal atualizado com sucesso!');
       navigate('/');
     } catch (err) {

@@ -1,14 +1,19 @@
-// ────────── ANIMAIS.JS COM SUPABASE STORAGE ──────────
 const express = require('express');
 const router = express.Router();
 const pool = require('../db');
 const multer = require('multer');
 const path = require('path');
-const supabase = require('../supabase');
 require('dotenv').config();
 
-// ────────── Multer (para uso temporário com Supabase) ──────────
-const storage = multer.memoryStorage();
+// ────────── Multer (uploads) ──────────
+const storage = multer.diskStorage({
+  destination: (_req, _file, cb) => cb(null, 'uploads/'),
+  filename: (_req, file, cb) => {
+    const ext = path.extname(file.originalname);
+    const nome = Date.now() + '-' + Math.round(Math.random() * 1e9) + ext;
+    cb(null, nome);
+  }
+});
 const upload = multer({ storage });
 
 // ────────── LISTA todos ──────────
@@ -34,24 +39,8 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// ────────── Função auxiliar para subir imagem para o Supabase ──────────
-async function uploadFotoParaSupabase(file) {
-  const nome = Date.now() + '-' + Math.round(Math.random() * 1e9) + path.extname(file.originalname);
-  const { data, error } = await supabase.storage
-    .from('fotos-animais')
-    .upload(nome, file.buffer, {
-      contentType: file.mimetype,
-      cacheControl: '3600',
-      upsert: false
-    });
-
-  if (error) throw error;
-  const url = `${process.env.SUPABASE_URL}/storage/v1/object/public/fotos-animais/${nome}?ts=${Date.now()}`;
-  return url;
-}
-
 // ────────── CRIA novo animal ──────────
-router.post('/', async (req, res) => {
+router.post('/', upload.single('foto'), async (req, res) => {
   const {
     nome, especie, chip, vacinas, doencas, entrada, saida, observacoes,
     motivo_saida, dados_adotante, comportamento, peso, sexo, idade,
@@ -62,10 +51,9 @@ router.post('/', async (req, res) => {
     nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
     disponivel_adocao
   } = req.body;
+  const foto = req.file ? req.file.filename : null;
 
-  const foto = req.body.foto || null;
   try {
-
     const { rows } = await pool.query(
       `INSERT INTO animais (
          nome, especie, chip, vacinas, doencas, entrada, saida, observacoes,

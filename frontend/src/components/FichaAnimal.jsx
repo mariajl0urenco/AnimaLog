@@ -124,23 +124,16 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
         </Modal.Header>
 
         <Modal.Body>
-		<div className="row">
-  <div className="col-md-4 mb-3">
-    <img
-  src={animal.foto?.startsWith('http')
-    ? animal.foto
-    : imagemPlaceholder}
-      alt={animal.nome}
-      className="img-fluid rounded shadow-sm"
-      onError={(e) => {
-        e.target.onerror = null;
-        e.target.src = imagemPlaceholder;
-      }}
-    />
-  </div>
+          <div className="row">
+            <div className="col-md-4 mb-3">
+              <img
+                src={animal.foto ? `https://animalog-backend.onrender.com/animais/uploads/${animal.foto}` : imagemPlaceholder}
+                alt={animal.nome}
+                className="img-fluid rounded shadow-sm"
+              />
+            </div>
 
-  <div className="col-md-8">
-		
+            <div className="col-md-8">
               <p><strong>Chip:</strong> {animal.chip}</p>
               <p><strong>Espécie:</strong> {cap(animal.especie)}</p>
               <p><strong>Género:</strong> {cap(animal.sexo)}</p>

@@ -173,16 +173,13 @@ const criarNovaBox = async () => {
             {animaisPaginados.map(animal => (
               <div className="col-12 col-sm-6 col-md-3 mb-4" key={animal.id}>
                 <Card className="h-100 shadow-sm">
-                  <Card.Img
-  variant="top"
-  src={animal.foto || '/assets/sem-foto.jpg'}
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = '/assets/sem-foto.jpg';
-  }}
-  style={{ objectFit: 'cover', height: '180px' }}
-/>
-
+                  {animal.foto && (
+                    <Card.Img
+                      variant="top"
+                      src={`https://animalog-backend.onrender.com/animais/uploads/${animal.foto}`}
+                      style={{ objectFit: 'cover', height: '180px' }}
+                    />
+                  )}
                   <Card.Body>
                     <Card.Title>{animal.nome}</Card.Title>
                     <select

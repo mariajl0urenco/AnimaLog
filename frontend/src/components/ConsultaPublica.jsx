@@ -59,20 +59,18 @@ function ConsultaPublica() {
             {animaisPaginados.map(animal => (
               <div key={animal.id} className="col-12 col-sm-6 col-md-3 mb-4">
                 <div className="card h-100 shadow">
-<img
-  src={animal.foto?.startsWith('http')
-      ? animal.foto
-      : '/assets/sem-foto.jpg'
-  }
-  alt={animal.nome}
-  onError={(e) => {
-    e.target.onerror = null;
-    e.target.src = '/assets/sem-foto.jpg';
-  }}
-  className="card-img-top"
-  style={{ objectFit: 'cover', height: '250px' }}
-/>
-
+                  {animal.foto ? (
+                    <img
+                      src={`https://animalog-backend.onrender.com/animais/uploads/${animal.foto}`}
+                      alt={animal.nome}
+                      className="card-img-top"
+                      style={{ objectFit: 'cover', height: '250px' }}
+                    />
+                  ) : (
+                    <div className="bg-secondary text-white d-flex justify-content-center align-items-center" style={{ height: '250px' }}>
+                      Sem foto
+                    </div>
+                  )}
                   <div className="card-body">
                     <h5 className="card-title">{animal.nome}</h5>
                     <p className="card-text">
