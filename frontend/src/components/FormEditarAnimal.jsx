@@ -122,15 +122,12 @@ export default function FormEditarAnimal() {
           await axios.post(`https://animalog-backend.onrender.com/animais/${id}/testes`, tst);
 
       if (imgFinal instanceof Blob) {
-  const fd = new FormData();
-  fd.append('foto', imgFinal, 'animal.jpg');
-  const { data } = await axios.put(`https://animalog-backend.onrender.com/animais/${id}/foto`, fd);
-  setFormData(p => ({ ...p, foto: data.foto }));
-}
-
+        const fd = new FormData();
+        fd.append('foto', imgFinal, 'animal.jpg');
+        await axios.put(`https://animalog-backend.onrender.com/animais/${id}/foto`, fd);
+      }
       alert('Animal atualizado com sucesso!');
-navigate('/');
-window.location.reload(); //
+      navigate('/');
     } catch (err) {
       console.error('Erro ao guardar alterações:', err);
       alert('Erro ao guardar alterações.');
