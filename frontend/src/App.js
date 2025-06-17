@@ -62,7 +62,7 @@ function AppWrapper() {
       </div>
 
       <footer className="text-center mt-4 py-3">
-        ANIMALOG — Desenvolvido por Maria José Lourenço — 2025
+        ANIMALOG - 2025
       </footer>
     </div>
   );
