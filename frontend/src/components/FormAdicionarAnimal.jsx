@@ -339,18 +339,18 @@ export default function FormAdicionarAnimal() {
         }}
       />
       <select
-        className="form-select"
-        value={teste.resultado}
-        onChange={e => {
-          const novos = [...formData.testes];
-          novos[idx].resultado = e.target.value;
-          setFormData(prev => ({ ...prev, testes: novos }));
-        }}
-      >
-        <option value="">-- Resultado --</option>
-        <option value="positivo">Positivo</option>
-        <option value="negativo">Negativo</option>
-      </select>
+  className="form-select"
+  value={teste.resultado}
+  onChange={e => {
+    const novos = [...formData.testes];
+    novos[idx].resultado = e.target.value.toLowerCase(); 
+    setFormData(prev => ({ ...prev, testes: novos }));
+  }}
+>
+  <option value="">-- Resultado --</option>
+  <option value="positivo">Positivo</option>
+  <option value="negativo">Negativo</option>
+</select>
       <select
         className="form-select"
         value={teste.tratamento_iniciado}

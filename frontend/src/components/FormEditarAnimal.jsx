@@ -110,26 +110,25 @@ const handleSubmit = async e => {
   try {
     const { vacinas, testes, ...animalData } = formData;
 
-    // Corrigir valores booleanos (Sim/Não → true/false)
-animalData.esterilizado = formData.esterilizado;
-animalData.desparasitado = formData.desparasitado;
-animalData.titular = formData.titular;
-animalData.tratamento_iniciado = formData.tratamento_iniciado;
-animalData.disponivel_adocao = formData.disponivel_adocao;
+    const testesNormalizados = testes.map(t => ({
+      ...t,
+      resultado: t.resultado?.toLowerCase() === 'positivo' ? 'pos'
+               : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
+               : t.resultado
+    }));
 
+    // Corrigir valores booleanos
+    animalData.esterilizado = formData.esterilizado;
+    animalData.desparasitado = formData.desparasitado;
+    animalData.titular = formData.titular;
+    animalData.tratamento_iniciado = formData.tratamento_iniciado;
+    animalData.disponivel_adocao = formData.disponivel_adocao;
 
     // Envia os dados principais do animal
     await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, animalData);
 
-    // Adiciona novas vacinas (se não tiverem id e tiverem nome+data)
-    for (const vac of vacinas) {
-      if (!vac.id && vac.nome && vac.data) {
-        await axios.post(`https://animalog-backend.onrender.com/animais/${id}/vacinas`, vac);
-      }
-    }
-
-    // Adiciona novos testes (se não tiverem id e tiverem nome+data)
-    for (const tst of testes) {
+    // Adiciona novos testes
+    for (const tst of testesNormalizados) {
       if (!tst.id && tst.nome && tst.data) {
         await axios.post(`https://animalog-backend.onrender.com/animais/${id}/testes`, {
           ...tst,
@@ -288,8 +287,8 @@ animalData.disponivel_adocao = formData.disponivel_adocao;
               onChange={e => handleTesteChange(i, 'resultado', e.target.value)}
             >
               <option value="">-- Resultado --</option>
-              <option value="pos">Positivo</option>
-              <option value="neg">Negativo</option>
+              <option value="positivo">Positivo</option>
+              <option value="negativo">Negativo</option>
             </select>
             <input
               type="date"

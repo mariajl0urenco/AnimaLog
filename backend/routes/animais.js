@@ -107,21 +107,27 @@ tratamento || null, toBool(tratamento_iniciado) || false, toBool(titular),
     }
 
     // Inserir testes, se existirem
-    if (testes && Array.isArray(JSON.parse(testes))) {
-      const testesArr = JSON.parse(testes);
-      for (const t of testesArr) {
-        await pool.query(
-          'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
-          [
-            animalId,
-            t.nome,
-            t.resultado,
-            t.data,
-            t.tratamento,
-            toBool(t.tratamento_iniciado)
-          ]
-        );
-      }
+if (testes && Array.isArray(JSON.parse(testes))) {
+  const testesArr = JSON.parse(testes);
+  for (const t of testesArr) {
+    const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
+                    : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
+                    : t.resultado;
+
+await pool.query(
+  'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
+  [
+    animalId,
+    t.nome,
+    resultadoEnum, 
+    t.data,
+    t.tratamento,
+    toBool(t.tratamento_iniciado)
+  ]
+);
+  }
+}
+
     }
 
     res.status(201).json(animalCriado);
@@ -198,22 +204,26 @@ router.put('/:id', upload.none(), async (req, res) => {
 
     // Atualizar testes
     if (testes && Array.isArray(JSON.parse(testes))) {
-      await pool.query('DELETE FROM testes WHERE animal_id = $1', [animalId]);
-      const testesArr = JSON.parse(testes);
-      for (const t of testesArr) {
-        await pool.query(
-          'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
-          [
-            animalId,
-            t.nome,
-            t.resultado,
-            t.data,
-            t.tratamento,
-            toBool(t.tratamento_iniciado)
-          ]
-        );
-      }
-    }
+  await pool.query('DELETE FROM testes WHERE animal_id = $1', [animalId]);
+  const testesArr = JSON.parse(testes);
+  for (const t of testesArr) {
+    const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
+                         : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
+                         : t.resultado; // já pode ser 'pos' ou 'neg'
+
+    await pool.query(
+      'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
+      [
+        animalId,
+        t.nome,
+        resultadoEnum,
+        t.data,
+        t.tratamento,
+        toBool(t.tratamento_iniciado)
+      ]
+    );
+  }
+}
 
     res.json(animalEditado);
   } catch (err) {
