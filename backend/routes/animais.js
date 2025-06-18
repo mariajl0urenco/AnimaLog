@@ -107,26 +107,19 @@ tratamento || null, toBool(tratamento_iniciado) || false, toBool(titular),
     }
 
     // Inserir testes, se existirem
-    if (testes && Array.isArray(JSON.parse(testes))) {
-      const testesArr = JSON.parse(testes);
-      for (const t of testesArr) {
-        const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
-                             : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
-                             : t.resultado;
-
-        await pool.query(
-          'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
-          [
-            animalId,
-            t.nome,
-            resultadoEnum, 
-            t.data,
-            t.tratamento,
-            toBool(t.tratamento_iniciado)
-          ]
-        );
-      }
-    }
+if (typeof testes === 'string') {
+  const testesArr = JSON.parse(testes);
+  await pool.query('DELETE FROM testes WHERE animal_id = $1', [animalId]);
+  for (const t of testesArr) {
+    const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
+                         : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
+                         : t.resultado;
+    await pool.query(
+      'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
+      [animalId, t.nome, resultadoEnum, t.data, t.tratamento, toBool(t.tratamento_iniciado)]
+    );
+  }
+}
 
     res.status(201).json(animalCriado); // <-- tudo ainda dentro do try
   } catch (err) {
@@ -189,25 +182,26 @@ router.put('/:id', upload.none(), async (req, res) => {
     const animalId = animalEditado.id;
 
     // Atualizar vacinas
-    if (vacinas && Array.isArray(JSON.parse(vacinas))) {
-      await pool.query('DELETE FROM vacinas WHERE animal_id = $1', [animalId]);
-      const vacinasArr = JSON.parse(vacinas);
-      for (const v of vacinasArr) {
-        await pool.query(
-          'INSERT INTO vacinas (animal_id, nome, data) VALUES ($1, $2, $3)',
-          [animalId, v.nome, v.data]
-        );
-      }
-    }
+    if (typeof vacinas === 'string') {
+  const vacinasArr = JSON.parse(vacinas);
+  await pool.query('DELETE FROM vacinas WHERE animal_id = $1', [animalId]);
+  for (const v of vacinasArr) {
+    await pool.query(
+      'INSERT INTO vacinas (animal_id, nome, data) VALUES ($1, $2, $3)',
+      [animalId, v.nome, v.data]
+    );
+  }
+}
+
 
     // Atualizar testes
-    if (testes && Array.isArray(JSON.parse(testes))) {
-  await pool.query('DELETE FROM testes WHERE animal_id = $1', [animalId]);
+if (typeof testes === 'string') {
   const testesArr = JSON.parse(testes);
+  await pool.query('DELETE FROM testes WHERE animal_id = $1', [animalId]);
   for (const t of testesArr) {
     const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
-                     : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
-                     : t.resultado;
+                         : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
+                         : t.resultado;
 
     await pool.query(
       'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
@@ -222,6 +216,7 @@ router.put('/:id', upload.none(), async (req, res) => {
     );
   }
 }
+
 
     res.json(animalEditado);
   } catch (err) {

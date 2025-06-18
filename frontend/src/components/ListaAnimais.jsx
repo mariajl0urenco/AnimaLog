@@ -20,11 +20,16 @@ export default function ListaAnimais() {
   const porPagina = 16;
 
   /* ── carrega lista ── */
-  useEffect(() => {
-    axios.get('https://animalog-backend.onrender.com/animais')
-         .then(r => setAnimais(r.data))
-         .catch(console.error);
-  }, []);
+const carregaAnimais = () => {
+  axios.get('https://animalog-backend.onrender.com/animais')
+       .then(r => setAnimais(r.data))
+       .catch(console.error);
+};
+
+useEffect(() => {
+  carregaAnimais();
+}, []);
+
 
   /* ── filtros ── */
   const ativos = animais.filter(a => !a.saida);
@@ -141,22 +146,24 @@ export default function ListaAnimais() {
 
       {/* ficha individual */}
       <FichaAnimal
-        show={show}
-        onHide={() => setShow(false)}
-        animal={sel}
-        onEditar={id => navigate(`/editar-animal/${id}`)}
-		tipo={tipo}
-        onRemover={id => {
-          if (window.confirm('Tem a certeza que quer remover este animal?')) {
-            axios.delete(`https://animalog-backend.onrender.com/animais/${id}`)
-                 .then(() => {
-                   setAnimais(animais.filter(x => x.id !== id));
-                   setShow(false);
-                 })
-                 .catch(console.error);
-          }
-        }}
-      />
+  show={show}
+  onHide={() => setShow(false)}
+  animal={sel}
+  onEditar={id => navigate(`/editar-animal/${id}`)}
+  tipo={tipo}
+  onAtualizar={() => carregaAnimais()}
+  onRemover={id => {
+    if (window.confirm('Tem a certeza que quer remover este animal?')) {
+      axios.delete(`https://animalog-backend.onrender.com/animais/${id}`)
+           .then(() => {
+             carregaAnimais();
+             setShow(false);
+           })
+           .catch(console.error);
+    }
+  }}
+/>
+
     </div>
   );
 }

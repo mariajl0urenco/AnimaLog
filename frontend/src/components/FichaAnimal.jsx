@@ -11,7 +11,7 @@ import './FichaAnimal.css';
 
 const cap = txt => txt ? txt.charAt(0).toUpperCase() + txt.slice(1) : 'N/D';
 
-export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualizado, tipo }) {
+export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualizar, tipo }) {
   const [vacinas, setVacinas] = useState([]);
   const [testes, setTestes] = useState([]);
   const [showHist, setShowHist] = useState(false);
@@ -48,7 +48,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
         ...animal,
         observacoes
       });
-      onAtualizado?.();
+      onAtualizar?.();
       alert("Observações atualizadas.");
     } catch (e) {
       alert('Erro ao guardar observações');
@@ -63,7 +63,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
         ...animal,
         disponivel_adocao: novoEstado
       });
-      onAtualizado?.();
+      onAtualizar?.();
     } catch (e) {
       alert('Erro ao atualizar estado de adoção');
       console.error(e);
@@ -74,7 +74,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
     if (!window.confirm("Tens a certeza que queres remover este animal?")) return;
     try {
       await axios.delete(`https://animalog-backend.onrender.com/animais/${animal.id}`);
-      onAtualizado?.();
+      onAtualizar?.();
       onHide();
     } catch (err) {
       alert("Erro ao remover animal.");
@@ -90,7 +90,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
         motivo_saida: 'adocao',
         dados_adotante: adoptData.dados
       });
-      onAtualizado?.();
+      onAtualizar?.();
       setShowAdop(false);
       onHide();
     } catch (e) {
@@ -107,7 +107,7 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
         motivo_saida: 'falecimento',
         observacoes: `${animal.observacoes || ''}\n[Falecimento] ${falecData.motivo}`
       });
-      onAtualizado?.();
+      onAtualizar?.();
       setShowFalec(false);
       onHide();
     } catch (e) {
@@ -218,16 +218,19 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
         await axios.post(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`, v);
         const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`);
         setVacinas(r.data);
+		onAtualizar?.();
       }} />
       <AdicionarTeste show={showAddTeste} onHide={() => setShowAddTeste(false)} onGuardar={async t => {
         await axios.post(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`, t);
         const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`);
         setTestes(r.data);
+		onAtualizar?.();
       }} />
       <EditarTeste show={showEditTeste} teste={testeSelecionado} onHide={() => setShowEditTeste(false)} onGuardar={async t => {
         await axios.put(`https://animalog-backend.onrender.com/animais/testes/${t.id}`, t);
         const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`);
         setTestes(r.data);
+		onAtualizar?.();
       }} />
 	  
 	  {showAdop && (
