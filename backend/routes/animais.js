@@ -63,7 +63,7 @@ router.post('/', upload.single('foto'), async (req, res) => {
     nome, especie, chip, vacinas, doencas, entrada, saida, observacoes,
     foto, motivo_saida, dados_adotante, box, comportamento, peso, sexo, idade,
     esterilizado, desparasitado, produto_desparasitado, data_desparasitado,
-    testes, data_testes, tratamento, tratamento_iniciado, titular,
+    testes, data_testes, tratamento, titular,
     motivo_entrada, motivo_volta, local_ocorrencia, concelho,
     data_nascimento, raca, cor, data_regresso, nome_teste,
     data_adocao, produto_desparasitacao, adotante, disponivel_adocao
@@ -80,7 +80,7 @@ router.post('/', upload.single('foto'), async (req, res) => {
     nome, especie, chip || null, vacinas || null, doencas || null, entrada || null, saida || null, observacoes || null,
     foto, motivo_saida || null, dados_adotante || null, box || null, comportamento || null, peso || null, sexo || null, idade || null,
     toBool(esterilizado), toBool(desparasitado), produto_desparasitado || null, data_desparasitado || null,
-    testes || null, null, tratamento || null, toBool(tratamento_iniciado), toBool(titular),
+    testes || null, null, tratamento || null, toBool(titular),
     motivo_entrada || null, motivo_volta || null, local_ocorrencia || null, concelho || null,
     data_nascimento || null, raca || null, cor || null, data_regresso || null, nome_teste || null,
     data_adocao || null, produto_desparasitacao || null, adotante || null, toBool(disponivel_adocao)

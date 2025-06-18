@@ -17,6 +17,8 @@ export default function FormAdicionarAnimal() {
     sexo: '',
     esterilizado: '',
 	desparasitado: '',
+  disponivel_adocao: '',
+  testes: [],
     nascimento: '',
     idade: '',
     peso: '',
@@ -113,16 +115,17 @@ export default function FormAdicionarAnimal() {
 
     // Prepara FormData para envio multipart
     const data = new FormData();
-    Object.entries(formData).forEach(([key, val]) => {
-  if (key === 'vacinas') {
-    data.append('vacinas', JSON.stringify(val));
-} else if (['esterilizado', 'titular', 'desparasitado'].includes(key)) {
-  const valor = typeof val === 'string' ? val.toLowerCase() : '';
-  data.append(key, valor === 'sim' ? 'true' : 'false');
-} else {
+Object.entries(formData).forEach(([key, val]) => {
+  if (key === 'vacinas' || key === 'testes') {
+    data.append(key, JSON.stringify(val));
+  } else if (['esterilizado', 'titular', 'desparasitado', 'disponivel_adocao'].includes(key)) {
+    const valor = typeof val === 'string' ? val.toLowerCase() : '';
+    data.append(key, valor === 'sim' ? 'true' : 'false');
+  } else {
     data.append(key, val);
   }
 });
+
 
     if (imagemFinal instanceof Blob) data.append('foto', imagemFinal, 'animal.jpg');
 
@@ -341,6 +344,77 @@ export default function FormAdicionarAnimal() {
             onChange={handleChange}
           />
         </div>
+
+<h4>Disponível para adoção?</h4>
+<div className="section-box mb-3">
+  <select
+    name="disponivel_adocao"
+    className="form-select"
+    value={formData.disponivel_adocao}
+    onChange={handleChange}
+  >
+    <option value="">-- Selecionar --</option>
+    <option value="sim">Sim</option>
+    <option value="não">Não</option>
+  </select>
+</div>
+
+
+<h4>Testes</h4>
+<div className="section-box">
+  {formData.testes.map((teste, idx) => (
+    <div key={idx} className="teste-row d-flex gap-2 mb-1">
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Nome do Teste"
+        value={teste.nome}
+        onChange={e => {
+          const novos = [...formData.testes];
+          novos[idx].nome = e.target.value;
+          setFormData(prev => ({ ...prev, testes: novos }));
+        }}
+      />
+      <input
+        type="text"
+        className="form-control"
+        placeholder="Resultado"
+        value={teste.resultado}
+        onChange={e => {
+          const novos = [...formData.testes];
+          novos[idx].resultado = e.target.value;
+          setFormData(prev => ({ ...prev, testes: novos }));
+        }}
+      />
+      <select
+        className="form-select"
+        value={teste.tratamento_iniciado}
+        onChange={e => {
+          const novos = [...formData.testes];
+          novos[idx].tratamento_iniciado = e.target.value;
+          setFormData(prev => ({ ...prev, testes: novos }));
+        }}
+      >
+        <option value="">Tratamento iniciado?</option>
+        <option value="sim">Sim</option>
+        <option value="não">Não</option>
+      </select>
+    </div>
+  ))}
+  <button
+    type="button"
+    className="btn btn-outline-info btn-sm mt-2"
+    onClick={() =>
+      setFormData(prev => ({
+        ...prev,
+        testes: [...prev.testes, { nome: '', resultado: '', tratamento_iniciado: '' }]
+      }))
+    }
+  >
+    + Adicionar teste
+  </button>
+</div>
+
 
         {/* FOTO */}
         <h4>Fotografia</h4>
