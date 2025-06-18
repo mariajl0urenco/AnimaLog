@@ -307,6 +307,7 @@ router.get('/publico/adocao', async (_req, res) => {
   }
 });
 
+
 // ────────── DETALHES por ID ──────────
 router.get('/:id', async (req, res) => {
   try {
