@@ -206,8 +206,8 @@ router.put('/:id', upload.none(), async (req, res) => {
   const testesArr = JSON.parse(testes);
   for (const t of testesArr) {
     const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
-                         : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
-                         : t.resultado; // já pode ser 'pos' ou 'neg'
+                     : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
+                     : t.resultado;
 
     await pool.query(
       'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
