@@ -92,7 +92,7 @@ tratamento || null, toBool(tratamento_iniciado) || false, toBool(titular),
 
 
 
-    const animalCriado = rows[0];
+        const animalCriado = rows[0];
     const animalId = animalCriado.id;
 
     // Inserir vacinas, se existirem
@@ -107,30 +107,28 @@ tratamento || null, toBool(tratamento_iniciado) || false, toBool(titular),
     }
 
     // Inserir testes, se existirem
-if (testes && Array.isArray(JSON.parse(testes))) {
-  const testesArr = JSON.parse(testes);
-  for (const t of testesArr) {
-    const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
-                    : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
-                    : t.resultado;
+    if (testes && Array.isArray(JSON.parse(testes))) {
+      const testesArr = JSON.parse(testes);
+      for (const t of testesArr) {
+        const resultadoEnum = t.resultado?.toLowerCase() === 'positivo' ? 'pos'
+                             : t.resultado?.toLowerCase() === 'negativo' ? 'neg'
+                             : t.resultado;
 
-await pool.query(
-  'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
-  [
-    animalId,
-    t.nome,
-    resultadoEnum, 
-    t.data,
-    t.tratamento,
-    toBool(t.tratamento_iniciado)
-  ]
-);
-  }
-}
-
+        await pool.query(
+          'INSERT INTO testes (animal_id, nome, resultado, data, tratamento, tratamento_iniciado) VALUES ($1, $2, $3, $4, $5, $6)',
+          [
+            animalId,
+            t.nome,
+            resultadoEnum, 
+            t.data,
+            t.tratamento,
+            toBool(t.tratamento_iniciado)
+          ]
+        );
+      }
     }
 
-    res.status(201).json(animalCriado);
+    res.status(201).json(animalCriado); // <-- tudo ainda dentro do try
   } catch (err) {
     console.error('Erro ao adicionar animal:', err);
     res.status(500).json({ erro: 'Erro ao adicionar animal' });
@@ -176,7 +174,7 @@ router.put('/:id', upload.none(), async (req, res) => {
       motivo_volta || null, local_ocorrencia || null, concelho || null,
       data_nascimento || null, raca || null, cor || null,
       nome_teste || null, produto_desparasitacao || null, data_adocao || null,
-      adotante || null, data_regresso || null, disponivel_adocao === 'true',
+      adotante || null, data_regresso || null, toBool(disponivel_adocao),
       req.params.id
     ];
 
