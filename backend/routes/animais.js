@@ -77,7 +77,7 @@ router.post('/', upload.single('foto'), async (req, res) => {
   )
   RETURNING *`,
   [
-    nome, especie, chip, vacinas || null, doencas || null, entrada || null, saida || null, observacoes || null,
+    nome, especie, chip || null, vacinas || null, doencas || null, entrada || null, saida || null, observacoes || null,
     foto, motivo_saida || null, dados_adotante || null, box || null, comportamento || null, peso || null, sexo || null, idade || null,
     toBool(esterilizado), toBool(desparasitado), produto_desparasitado || null, data_desparasitado || null,
     testes || null, null, tratamento || null, toBool(tratamento_iniciado), toBool(titular),
