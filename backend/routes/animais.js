@@ -58,36 +58,39 @@ router.post('/', upload.single('foto'), async (req, res) => {
   }
 
   try {
-    const { rows } = await pool.query(
-      `INSERT INTO animais (
-         nome, especie, chip, doencas, entrada, saida, observacoes,
-         motivo_saida, dados_adotante, comportamento, peso, sexo, idade,
-         esterilizado, desparasitado, produto_desparasitado, data_desparasitado,
-         tratamento, tratamento_iniciado, titular, box, motivo_entrada,
-         motivo_volta, local_ocorrencia, concelho, data_nascimento, raca, cor,
-         foto, nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
-         disponivel_adocao
-       ) VALUES (
-         $1,$2,$3,$4,$5,$6,$7,
-         $8,$9,$10,$11,$12,$13,
-         $14,$15,$16,$17,$18,$19,$20,$21,$22,
-         $23,$24,$25,$26,$27,$28,$29,$30,$31,$32,
-         $33,$34,$35,$36,$37
-       ) RETURNING *`,
-      [
-        nome, especie, chip, doencas || null, entrada || null, saida || null,
-        observacoes || null, motivo_saida || null, dados_adotante || null,
-        comportamento || null, peso || null, sexo || null, idade || null,
-        esterilizado === 'true', desparasitado === 'true',
-        produto_desparasitado || null, data_desparasitado || null,
-        tratamento || null, tratamento_iniciado === 'true',
-        titular === 'true', box || null, motivo_entrada,
-        motivo_volta || null, local_ocorrencia || null, concelho || null,
-        data_nascimento || null, raca || null, cor || null, foto,
-        nome_teste || null, produto_desparasitacao || null, data_adocao || null,
-        adotante || null, data_regresso || null, disponivel_adocao === 'true'
-      ]
-    );
+    const { rows } = await pool.query(`
+  INSERT INTO animais (
+    nome, especie, chip, doencas, entrada, saida, observacoes,
+    motivo_saida, dados_adotante, comportamento, peso, sexo, idade,
+    esterilizado, desparasitado, produto_desparasitado, data_desparasitado,
+    tratamento, tratamento_iniciado, titular, box, motivo_entrada,
+    motivo_volta, local_ocorrencia, concelho, data_nascimento, raca, cor,
+    foto, nome_teste, produto_desparasitacao, data_adocao, adotante, data_regresso,
+    disponivel_adocao
+  )
+  VALUES (
+    $1,$2,$3,$4,$5,$6,$7,
+    $8,$9,$10,$11,$12,$13,
+    $14,$15,$16,$17,$18,$19,$20,$21,$22,
+    $23,$24,$25,$26,$27,$28,$29,$30,$31,$32,
+    $33,$34,$35,$36,$37
+  )
+  RETURNING *`,
+  [
+    nome, especie, chip, doencas || null, entrada || null, saida || null,
+    observacoes || null, motivo_saida || null, dados_adotante || null,
+    comportamento || null, peso || null, sexo || null, idade || null,
+    esterilizado === 'true', desparasitado === 'true',
+    produto_desparasitado || null, data_desparasitado || null,
+    tratamento || null, tratamento_iniciado === 'true',
+    titular === 'true', box || null, motivo_entrada,
+    motivo_volta || null, local_ocorrencia || null, concelho || null,
+    data_nascimento || null, raca || null, cor || null, foto,
+    nome_teste || null, produto_desparasitacao || null, data_adocao || null,
+    adotante || null, data_regresso || null, disponivel_adocao === 'true'
+  ]
+);
+
 
     const animalCriado = rows[0];
     const animalId = animalCriado.id;
