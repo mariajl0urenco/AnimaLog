@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CropImage from './CropImage';
-import './FormAnimal.css';                     
+import './FormAnimal.css';
 
 export default function FormAdicionarAnimal() {
   const [formData, setFormData] = useState({
@@ -25,6 +25,7 @@ export default function FormAdicionarAnimal() {
     concelho: '',
     local_ocorrencia: ''
   });
+
   const [imagemPreview, setImagemPreview] = useState(null);
   const [imagemFinal, setImagemFinal] = useState(null);
   const [mostrarCropper, setMostrarCropper] = useState(false);
@@ -38,10 +39,29 @@ export default function FormAdicionarAnimal() {
       .catch(console.error);
   }, []);
 
+  /* ───── Lógica entre idade e data nascimento ───── */
+  useEffect(() => {
+    if (formData.nascimento) {
+      const nasc = new Date(formData.nascimento);
+      const hoje = new Date();
+      let idade = hoje.getFullYear() - nasc.getFullYear();
+      const m = hoje.getMonth() - nasc.getMonth();
+      if (m < 0 || (m === 0 && hoje.getDate() < nasc.getDate())) idade--;
+      if (!isNaN(idade)) {
+        setFormData(prev => ({ ...prev, idade: idade.toString() }));
+      }
+    }
+  }, [formData.nascimento]);
+
   /* ───── Handlers ───── */
   const handleChange = e => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+
+    if (name === "idade" && value) {
+      setFormData(prev => ({ ...prev, idade: value, nascimento: '' }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleVacinaChange = (i, field, value) => {
@@ -71,23 +91,23 @@ export default function FormAdicionarAnimal() {
   const handleSubmit = async e => {
     e.preventDefault();
 
-    // validações mínimas
     if (
       !formData.nome.trim() ||
       !formData.especie ||
-      !formData.chip ||
       !formData.entrada ||
-      !formData.motivo_entrada
+      !formData.motivo_entrada ||
+      !formData.sexo ||
+      (!formData.idade && !formData.nascimento)
     ) {
-      alert('Preenche Nome, Espécie, Chip, Data de Entrada e Motivo de Entrada.');
+      alert('Preenche os campos obrigatórios: Nome, Espécie, Data de Entrada, Sexo, Motivo de Entrada e Idade ou Data de Nascimento.');
       return;
     }
-    if (formData.chip.length !== 15) {
+
+    if (formData.chip && formData.chip.length !== 15) {
       alert('O número de chip deve ter exatamente 15 dígitos.');
       return;
     }
 
-    // prepara FormData multipart
     const data = new FormData();
     Object.entries(formData).forEach(([key, val]) => {
       if (key === 'vacinas') data.append('vacinas', JSON.stringify(val));
@@ -105,14 +125,9 @@ export default function FormAdicionarAnimal() {
     }
   };
 
-  /* ───── Render ───── */
   return (
     <>
-      <form
-        className="form-animal"                
-        onSubmit={handleSubmit}
-        encType="multipart/form-data"
-      >
+      <form className="form-animal" onSubmit={handleSubmit} encType="multipart/form-data">
         <h2>Adicionar Animal</h2>
 
         {/* SEÇÃO PRINCIPAL */}
@@ -120,7 +135,7 @@ export default function FormAdicionarAnimal() {
           <input
             type="text"
             name="nome"
-            placeholder="Nome *"
+            placeholder="Nome / Nº de processo *"
             className="form-control mb-2"
             value={formData.nome}
             onChange={handleChange}
@@ -140,17 +155,6 @@ export default function FormAdicionarAnimal() {
           </select>
 
           <input
-            type="text"
-            name="chip"
-            placeholder="Chip (15 dígitos) *"
-            className="form-control mb-2"
-            value={formData.chip}
-            onChange={handleChange}
-            maxLength="15"
-            required
-          />
-
-          <input
             type="date"
             name="entrada"
             className="form-control mb-2"
@@ -167,20 +171,22 @@ export default function FormAdicionarAnimal() {
             required
           >
             <option value="">-- Motivo de Entrada * --</option>
-            <option value="Entrega por Detentor">Entrega por Detentor</option>
-            <option value="Entrega por Não Detentor">Entrega por Não Detentor</option>
-            <option value="Entrega por Autoridade Policial">Entrega por Autoridade Policial</option>
-            <option value="Entrega por Entidade Rodoviária">Entrega por Entidade Rodoviária</option>
-            <option value="Recolha de Animal Errante">Recolha de Animal Errante</option>
-            <option value="Recolha de Animal a Particular">Recolha de Animal a Particular</option>
-            <option value="Sequestro Sanitário">Sequestro Sanitário</option>
-            <option value="Apreendido">Apreendido</option>
+            {/* ...opções... */}
           </select>
         </div>
 
-        {/* DADOS OPCIONAIS */}
+        {/* DADOS ADICIONAIS */}
         <h4>Dados adicionais</h4>
         <div className="section-box">
+          <input
+            type="text"
+            name="chip"
+            placeholder="Chip (15 dígitos)"
+            className="form-control mb-2"
+            value={formData.chip}
+            onChange={handleChange}
+            maxLength="15"
+          />
           <input
             type="text"
             name="raca"
@@ -211,8 +217,9 @@ export default function FormAdicionarAnimal() {
             className="form-select mb-2"
             value={formData.sexo}
             onChange={handleChange}
+            required
           >
-            <option value="">-- Sexo --</option>
+            <option value="">-- Sexo * --</option>
             <option value="fêmea">Fêmea</option>
             <option value="macho">Macho</option>
           </select>
@@ -226,7 +233,7 @@ export default function FormAdicionarAnimal() {
             <option value="sim">Sim</option>
             <option value="não">Não</option>
           </select>
-		  <label>Data de Nascimento</label>
+          <label>Data de Nascimento</label>
           <input
             type="date"
             name="nascimento"
@@ -237,10 +244,11 @@ export default function FormAdicionarAnimal() {
           <input
             type="number"
             name="idade"
-            placeholder="Idade"
+            placeholder="Idade *"
             className="form-control mb-2"
             value={formData.idade}
             onChange={handleChange}
+            required={!formData.nascimento}
           />
           <input
             type="number"

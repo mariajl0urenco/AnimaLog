@@ -52,6 +52,13 @@ router.post('/', async (req, res) => {
 router.delete('/:nome', async (req, res) => {
   const { nome } = req.params;
   try {
+    // 🔐 Verifica se há animais nesta box
+    const { rowCount: numAnimais } = await pool.query('SELECT 1 FROM animais WHERE box = $1 LIMIT 1', [nome]);
+    if (numAnimais > 0) {
+      return res.status(400).json({ erro: 'Não é possível apagar uma box com animais associados.' });
+    }
+
+    // Continua com a eliminação
     const { rowCount } = await pool.query('DELETE FROM boxes WHERE nome = $1', [nome]);
     if (rowCount === 0) {
       return res.status(404).json({ erro: 'Box não encontrada' });
@@ -62,5 +69,6 @@ router.delete('/:nome', async (req, res) => {
     res.status(500).json({ erro: 'Erro ao apagar box' });
   }
 });
+
 
 module.exports = router;

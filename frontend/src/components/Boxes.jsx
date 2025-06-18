@@ -137,22 +137,28 @@ const criarNovaBox = async () => {
     <Button
       variant="danger"
       onClick={async () => {
-        if (window.confirm(`Tens a certeza que queres apagar a box "${boxSelecionada}"?`)) {
-          try {
-            await axios.delete(`https://animalog-backend.onrender.com/boxes/${boxSelecionada}`);
-            setNomesBoxes(prev => prev.filter(nome => nome !== boxSelecionada));
-            setBoxSelecionada('');
-            setContagens(prev => {
-              const novo = { ...prev };
-              delete novo[boxSelecionada];
-              return novo;
-            });
-          } catch (err) {
-            console.error('Erro ao apagar box:', err);
-            alert('Não foi possível apagar a box. Verifica se não há animais associados.');
-          }
-        }
-      }}
+  if ((contagens[boxSelecionada] || 0) > 0) {
+    alert(`Não é possível apagar a box "${boxSelecionada}" porque ainda tem ${contagens[boxSelecionada]} animal(is) lá dentro.`);
+    return;
+  }
+
+  if (window.confirm(`Tens a certeza que queres apagar a box "${boxSelecionada}"?`)) {
+    try {
+      await axios.delete(`https://animalog-backend.onrender.com/boxes/${boxSelecionada}`);
+      setNomesBoxes(prev => prev.filter(nome => nome !== boxSelecionada));
+      setBoxSelecionada('');
+      setContagens(prev => {
+        const novo = { ...prev };
+        delete novo[boxSelecionada];
+        return novo;
+      });
+    } catch (err) {
+      console.error('Erro ao apagar box:', err);
+      alert('Erro ao tentar apagar a box.');
+    }
+  }
+}}
+
     >
       🗑️ Apagar box
     </Button>

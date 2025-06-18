@@ -132,15 +132,16 @@ export default function HistoricoAnimais() {
                     🔍 Ver Ficha
                   </Button>
 
-                  {a.motivo_saida === 'adocao' && (
-                    <Button
-                      variant="outline-info"
-                      size="sm"
-                      onClick={() => { setSel(a); setShow(true); }}
-                    >
-                      🔄 Reentrada
-                    </Button>
-                  )}
+                  {a.motivo_saida === 'adocao' && a.saida && (
+  <Button
+    variant="outline-info"
+    size="sm"
+    onClick={() => { setSel(a); setShow(true); }}
+  >
+    🔄 Reentrada
+  </Button>
+)}
+
                 </div>
               </div>
             </div>
