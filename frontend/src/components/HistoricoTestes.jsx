@@ -1,7 +1,20 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
+import axios from 'axios';
 
-function HistoricoTestes({ testes = [], show, onHide, onEditar }) {
+function HistoricoTestes({ testes = [], show, onHide, onEditar, onAtualizar }) {
+
+  const eliminarTeste = async (id) => {
+    if (!window.confirm("Eliminar este teste?")) return;
+    try {
+      await axios.delete(`https://animalog-backend.onrender.com/animais/testes/${id}`);
+      onAtualizar?.();
+    } catch (e) {
+      alert('Erro ao eliminar teste');
+      console.error(e);
+    }
+  };
+
   return (
     <Modal show={show} onHide={onHide} centered>
       <Modal.Header closeButton>
@@ -23,13 +36,22 @@ function HistoricoTestes({ testes = [], show, onHide, onEditar }) {
                     </div>
                   )}
                 </div>
-                <Button
-                  variant="outline-secondary"
-                  size="sm"
-                  onClick={() => onEditar?.(t)}
-                >
-                  ✎ Editar
-                </Button>
+                <div className="d-flex flex-column gap-1">
+                  <Button
+                    variant="outline-secondary"
+                    size="sm"
+                    onClick={() => onEditar?.(t)}
+                  >
+                    ✎
+                  </Button>
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    onClick={() => eliminarTeste(t.id)}
+                  >
+                    🗑️
+                  </Button>
+                </div>
               </li>
             ))}
           </ul>

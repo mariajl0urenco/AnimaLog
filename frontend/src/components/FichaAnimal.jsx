@@ -212,8 +212,31 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
       </Modal>
 
       {/* Modais externos */}
-      <HistoricoVacinas show={showHist} vacinas={vacinas} onHide={() => setShowHist(false)} />
-      <HistoricoTestes show={showHistTestes} testes={testes} onHide={() => setShowHistTestes(false)} onEditar={t => { setTesteSelecionado(t); setShowEditTeste(true); }} />
+      <HistoricoVacinas
+  show={showHist}
+  vacinas={vacinas}
+  onHide={() => setShowHist(false)}
+  onAtualizar={async () => {
+    const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`);
+    setVacinas(r.data);
+    onAtualizar?.();
+  }}
+/>
+      <HistoricoTestes
+  show={showHistTestes}
+  testes={testes}
+  onHide={() => setShowHistTestes(false)}
+  onEditar={t => {
+    setTesteSelecionado(t);
+    setShowEditTeste(true);
+  }}
+  onAtualizar={async () => {
+    const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/testes`);
+    setTestes(r.data);
+    onAtualizar?.();
+  }}
+/>
+
       <AdicionarVacina show={showAddVacina} onHide={() => setShowAddVacina(false)} onGuardar={async v => {
         await axios.post(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`, v);
         const r = await axios.get(`https://animalog-backend.onrender.com/animais/${animal.id}/vacinas`);

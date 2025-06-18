@@ -106,7 +106,6 @@ export default function FormEditarAnimal() {
 
 const handleSubmit = async e => {
   e.preventDefault();
-
   try {
     const { vacinas, testes, ...animalData } = formData;
 
@@ -117,24 +116,26 @@ const handleSubmit = async e => {
                : t.resultado
     }));
 
-    // Corrigir valores booleanos
     animalData.esterilizado = formData.esterilizado;
     animalData.desparasitado = formData.desparasitado;
     animalData.titular = formData.titular;
     animalData.tratamento_iniciado = formData.tratamento_iniciado;
     animalData.disponivel_adocao = formData.disponivel_adocao;
 
-    // Envia os dados principais do animal
-    await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, animalData);
+    // ✅ Envia vacinas e testes no PUT
+    await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, {
+      ...animalData,
+      vacinas,
+      testes: testesNormalizados
+    });
 
-    // Adiciona novos testes
-    for (const tst of testesNormalizados) {
-      if (!tst.id && tst.nome && tst.data) {
-        await axios.post(`https://animalog-backend.onrender.com/animais/${id}/testes`, {
-          ...tst,
-          tratamento_iniciado: tst.tratamento_iniciado,
-        });
-      }
+    // ✅ Elimina vacinas/testes apagados
+    for (const vacinaId of removidasVacinas) {
+      await axios.delete(`https://animalog-backend.onrender.com/animais/vacinas/${vacinaId}`);
+    }
+
+    for (const testeId of removidasTestes) {
+      await axios.delete(`https://animalog-backend.onrender.com/animais/testes/${testeId}`);
     }
 
     alert('Animal atualizado com sucesso!');
@@ -144,6 +145,8 @@ const handleSubmit = async e => {
     alert('Erro ao atualizar o animal.');
   }
 };
+
+
 
 
   return (
