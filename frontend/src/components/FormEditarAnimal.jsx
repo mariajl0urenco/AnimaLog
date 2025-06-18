@@ -104,35 +104,48 @@ export default function FormEditarAnimal() {
     r.readAsDataURL(f);
   };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    try {
-      const { vacinas, testes, ...animalData } = formData;
-      await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, animalData);
+const handleSubmit = async e => {
+  e.preventDefault();
 
-      await Promise.all(removidasVacinas.map(vId => axios.delete(`https://animalog-backend.onrender.com/animais/vacinas/${vId}`)));
-      await Promise.all(removidasTestes.map(tId => axios.delete(`https://animalog-backend.onrender.com/animais/testes/${tId}`)));
+  try {
+    const { vacinas, testes, ...animalData } = formData;
 
-      for (const vac of vacinas)
-        if (!vac.id)
-          await axios.post(`https://animalog-backend.onrender.com/animais/${id}/vacinas`, vac);
+    // Corrigir valores booleanos (Sim/Não → true/false)
+animalData.esterilizado = formData.esterilizado;
+animalData.desparasitado = formData.desparasitado;
+animalData.titular = formData.titular;
+animalData.tratamento_iniciado = formData.tratamento_iniciado;
+animalData.disponivel_adocao = formData.disponivel_adocao;
 
-      for (const tst of testes)
-        if (!tst.id)
-          await axios.post(`https://animalog-backend.onrender.com/animais/${id}/testes`, tst);
 
-      if (imgFinal instanceof Blob) {
-        const fd = new FormData();
-        fd.append('foto', imgFinal, 'animal.jpg');
-        await axios.put(`https://animalog-backend.onrender.com/animais/${id}/foto`, fd);
+    // Envia os dados principais do animal
+    await axios.put(`https://animalog-backend.onrender.com/animais/${id}`, animalData);
+
+    // Adiciona novas vacinas (se não tiverem id e tiverem nome+data)
+    for (const vac of vacinas) {
+      if (!vac.id && vac.nome && vac.data) {
+        await axios.post(`https://animalog-backend.onrender.com/animais/${id}/vacinas`, vac);
       }
-      alert('Animal atualizado com sucesso!');
-      navigate('/');
-    } catch (err) {
-      console.error('Erro ao guardar alterações:', err);
-      alert('Erro ao guardar alterações.');
     }
-  };
+
+    // Adiciona novos testes (se não tiverem id e tiverem nome+data)
+    for (const tst of testes) {
+      if (!tst.id && tst.nome && tst.data) {
+        await axios.post(`https://animalog-backend.onrender.com/animais/${id}/testes`, {
+          ...tst,
+          tratamento_iniciado: tst.tratamento_iniciado,
+        });
+      }
+    }
+
+    alert('Animal atualizado com sucesso!');
+    navigate('/');
+  } catch (error) {
+    console.error(error);
+    alert('Erro ao atualizar o animal.');
+  }
+};
+
 
   return (
     <form onSubmit={handleSubmit} className="form-animal" encType="multipart/form-data">

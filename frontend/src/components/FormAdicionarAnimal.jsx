@@ -16,6 +16,7 @@ export default function FormAdicionarAnimal() {
     box: '',
     sexo: '',
     esterilizado: '',
+	desparasitado: '',
     nascimento: '',
     idade: '',
     peso: '',
@@ -113,9 +114,16 @@ export default function FormAdicionarAnimal() {
     // Prepara FormData para envio multipart
     const data = new FormData();
     Object.entries(formData).forEach(([key, val]) => {
-      if (key === 'vacinas') data.append('vacinas', JSON.stringify(val));
-      else data.append(key, val);
-    });
+  if (key === 'vacinas') {
+    data.append('vacinas', JSON.stringify(val));
+} else if (['esterilizado', 'titular', 'desparasitado'].includes(key)) {
+  const valor = typeof val === 'string' ? val.toLowerCase() : '';
+  data.append(key, valor === 'sim' ? 'true' : 'false');
+} else {
+    data.append(key, val);
+  }
+});
+
     if (imagemFinal instanceof Blob) data.append('foto', imagemFinal, 'animal.jpg');
 
     try {

@@ -190,9 +190,17 @@ export default function FichaAnimal({ animal, show, onHide, onEditar, onAtualiza
 
 <Modal.Footer className="justify-content-between">
   <div>
-    <Button variant="success" className="me-2" onClick={() => setShowAdop(true)}>🏠 Adoção</Button>
-    <Button variant="dark" onClick={() => setShowFalec(true)}>🌈 Falecimento</Button>
+    {/* Só mostra o botão "Adoção" se o animal ainda não tiver saída ou se não tiver falecido */}
+    {(!animal.saida || animal.motivo_saida !== 'falecimento') && (
+      <Button variant="success" className="me-2" onClick={() => setShowAdop(true)}>🏠 Adoção</Button>
+    )}
+
+    {/* Só permite registar falecimento se ainda não tiver sido feito */}
+    {!animal.saida && (
+      <Button variant="dark" onClick={() => setShowFalec(true)}>🌈 Falecimento</Button>
+    )}
   </div>
+
   <div>
     <Button variant="danger" className="me-2" onClick={removerAnimal}>🗑️ Remover</Button>
     {tipo === 'tecnico' && (
