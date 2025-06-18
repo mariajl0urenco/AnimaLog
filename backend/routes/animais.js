@@ -115,7 +115,7 @@ router.post('/', upload.single('foto'), async (req, res) => {
             t.resultado,
             t.data,
             t.tratamento,
-            t.tratamento_iniciado === 'true'
+            toBool(t.tratamento_iniciado)
           ]
         );
       }
@@ -160,10 +160,10 @@ router.put('/:id', upload.none(), async (req, res) => {
       nome, especie, chip, doencas || null,
       entrada || null, saida || null, observacoes || null, motivo_saida || null,
       dados_adotante || null, comportamento || null, peso || null, sexo || null,
-      idade || null, esterilizado === 'true', desparasitado === 'true',
+      idade || null, toBool(esterilizado), toBool(desparasitado),
       produto_desparasitado || null, data_desparasitado || null,
-      tratamento || null, tratamento_iniciado === 'true',
-      titular === 'true', box || null, motivo_entrada,
+      tratamento || null, toBool(tratamento_iniciado),
+      toBool(titular), box || null, motivo_entrada,
       motivo_volta || null, local_ocorrencia || null, concelho || null,
       data_nascimento || null, raca || null, cor || null,
       nome_teste || null, produto_desparasitacao || null, data_adocao || null,
@@ -206,7 +206,7 @@ router.put('/:id', upload.none(), async (req, res) => {
             t.resultado,
             t.data,
             t.tratamento,
-            t.tratamento_iniciado === 'true'
+            toBool(t.tratamento_iniciado)
           ]
         );
       }
