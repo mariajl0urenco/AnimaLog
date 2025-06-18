@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import CropImage from './CropImage';
-import './FormAnimal.css';
+import './FormAnimal.css';                     
 
 export default function FormAdicionarAnimal() {
   const [formData, setFormData] = useState({
@@ -25,7 +25,7 @@ export default function FormAdicionarAnimal() {
     concelho: '',
     local_ocorrencia: ''
   });
-
+  
   const [imagemPreview, setImagemPreview] = useState(null);
   const [imagemFinal, setImagemFinal] = useState(null);
   const [mostrarCropper, setMostrarCropper] = useState(false);
@@ -39,7 +39,7 @@ export default function FormAdicionarAnimal() {
       .catch(console.error);
   }, []);
 
-  /* ───── Lógica entre idade e data nascimento ───── */
+  /* ───── Lógica entre Data de Nascimento e Idade ───── */
   useEffect(() => {
     if (formData.nascimento) {
       const nasc = new Date(formData.nascimento);
@@ -53,10 +53,10 @@ export default function FormAdicionarAnimal() {
     }
   }, [formData.nascimento]);
 
-  /* ───── Handlers ───── */
   const handleChange = e => {
     const { name, value } = e.target;
 
+    // Se o usuário alterar o campo "idade" manualmente, limpo a data de nascimento
     if (name === "idade" && value) {
       setFormData(prev => ({ ...prev, idade: value, nascimento: '' }));
     } else {
@@ -91,6 +91,7 @@ export default function FormAdicionarAnimal() {
   const handleSubmit = async e => {
     e.preventDefault();
 
+    // Validação dos campos obrigatórios
     if (
       !formData.nome.trim() ||
       !formData.especie ||
@@ -99,15 +100,17 @@ export default function FormAdicionarAnimal() {
       !formData.sexo ||
       (!formData.idade && !formData.nascimento)
     ) {
-      alert('Preenche os campos obrigatórios: Nome, Espécie, Data de Entrada, Sexo, Motivo de Entrada e Idade ou Data de Nascimento.');
+      alert('Preenche todos os campos obrigatórios: Nome / Nº de processo, Espécie, Data de Entrada, Motivo de Entrada, Sexo e Idade ou Data de Nascimento.');
       return;
     }
 
+    // Se o chip for preenchido, valida o tamanho
     if (formData.chip && formData.chip.length !== 15) {
       alert('O número de chip deve ter exatamente 15 dígitos.');
       return;
     }
 
+    // Prepara FormData para envio multipart
     const data = new FormData();
     Object.entries(formData).forEach(([key, val]) => {
       if (key === 'vacinas') data.append('vacinas', JSON.stringify(val));
@@ -130,7 +133,7 @@ export default function FormAdicionarAnimal() {
       <form className="form-animal" onSubmit={handleSubmit} encType="multipart/form-data">
         <h2>Adicionar Animal</h2>
 
-        {/* SEÇÃO PRINCIPAL */}
+        {/* ───── BLOCO OBRIGATÓRIO ───── */}
         <div className="section-box">
           <input
             type="text"
@@ -171,11 +174,49 @@ export default function FormAdicionarAnimal() {
             required
           >
             <option value="">-- Motivo de Entrada * --</option>
-            {/* ...opções... */}
+            <option value="Entrega por Detentor">Entrega por Detentor</option>
+            <option value="Entrega por Não Detentor">Entrega por Não Detentor</option>
+            <option value="Entrega por Autoridade Policial">Entrega por Autoridade Policial</option>
+            <option value="Entrega por Entidade Rodoviária">Entrega por Entidade Rodoviária</option>
+            <option value="Recolha de Animal Errante">Recolha de Animal Errante</option>
+            <option value="Recolha de Animal a Particular">Recolha de Animal a Particular</option>
+            <option value="Sequestro Sanitário">Sequestro Sanitário</option>
+            <option value="Apreendido">Apreendido</option>
           </select>
+
+          <select
+            name="sexo"
+            className="form-select mb-2"
+            value={formData.sexo}
+            onChange={handleChange}
+            required
+          >
+            <option value="">-- Sexo * --</option>
+            <option value="fêmea">Fêmea</option>
+            <option value="macho">Macho</option>
+          </select>
+
+          <label>Data de Nascimento</label>
+          <input
+            type="date"
+            name="nascimento"
+            className="form-control mb-2"
+            value={formData.nascimento}
+            onChange={handleChange}
+          />
+
+          <input
+            type="number"
+            name="idade"
+            placeholder="Idade *"
+            className="form-control mb-2"
+            value={formData.idade}
+            onChange={handleChange}
+            required={!formData.nascimento}
+          />
         </div>
 
-        {/* DADOS ADICIONAIS */}
+        {/* ───── BLOCO DE DADOS ADICIONAIS ───── */}
         <h4>Dados adicionais</h4>
         <div className="section-box">
           <input
@@ -213,17 +254,6 @@ export default function FormAdicionarAnimal() {
             {boxes.map((b, i) => <option key={i} value={b}>{b}</option>)}
           </select>
           <select
-            name="sexo"
-            className="form-select mb-2"
-            value={formData.sexo}
-            onChange={handleChange}
-            required
-          >
-            <option value="">-- Sexo * --</option>
-            <option value="fêmea">Fêmea</option>
-            <option value="macho">Macho</option>
-          </select>
-          <select
             name="esterilizado"
             className="form-select mb-2"
             value={formData.esterilizado}
@@ -233,23 +263,6 @@ export default function FormAdicionarAnimal() {
             <option value="sim">Sim</option>
             <option value="não">Não</option>
           </select>
-          <label>Data de Nascimento</label>
-          <input
-            type="date"
-            name="nascimento"
-            className="form-control mb-2"
-            value={formData.nascimento}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            name="idade"
-            placeholder="Idade *"
-            className="form-control mb-2"
-            value={formData.idade}
-            onChange={handleChange}
-            required={!formData.nascimento}
-          />
           <input
             type="number"
             name="peso"
@@ -258,6 +271,7 @@ export default function FormAdicionarAnimal() {
             value={formData.peso}
             onChange={handleChange}
           />
+          {/* Outros campos opcionais, se houver */}
         </div>
 
         {/* VACINAS */}
@@ -357,3 +371,4 @@ export default function FormAdicionarAnimal() {
     </>
   );
 }
+
