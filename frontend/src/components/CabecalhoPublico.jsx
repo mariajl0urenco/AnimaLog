@@ -21,7 +21,7 @@ export default function CabecalhoPublico({ onAgendarVisita }) {
         {/* Linha com logo, frase e botões */}
         <div className="d-flex justify-content-between align-items-center flex-wrap">
           {/* Logótipo à esquerda */}
-          <img src={logo} alt="Animalog" style={{ height: '200px' }} />
+          <img src={logo} alt="Animalog" style={{ height: '250px' }} />
 
           {/* Frase no centro */}
           <div className="text-center flex-grow-1">
