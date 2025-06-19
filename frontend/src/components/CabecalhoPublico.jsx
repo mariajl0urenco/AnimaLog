@@ -11,7 +11,7 @@ export default function CabecalhoPublico({ onAgendarVisita }) {
     <div className="p-4 mb-4 rounded shadow-sm bg-light bg-opacity-75">
       {/* Cabeçalho superior */}
       <div className="d-flex justify-content-between align-items-center flex-wrap">
-        <img src={logo} alt="Animalog" style={{ height: '80px' }} />
+        <img src={logo} alt="Animalog" style={{ height: '120px' }} />
 
         <div className="d-flex gap-2 mt-3 mt-md-0">
           <button className="btn btn-outline-secondary" onClick={onAgendarVisita}>
