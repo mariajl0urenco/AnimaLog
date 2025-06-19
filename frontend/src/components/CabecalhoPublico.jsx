@@ -11,15 +11,20 @@ export default function CabecalhoPublico({ onAgendarVisita }) {
    <div
   className="p-4 mb-4 rounded shadow-sm"
   style={{
-    backgroundColor: 'rgba(255, 255, 255, 0.6)', // cor de fundo
+    backgroundColor: 'rgba(255, 255, 255, 0.3)', 
     borderRadius: '12px',
     padding: '24px',
     boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
   }}
 >
       {/* Cabeçalho superior */}
-      <div className="d-flex justify-content-between align-items-center flex-wrap">
-        <img src={logo} alt="Animalog" style={{ height: '180px' }} />
+      <div className="d-flex flex-column align-items-center mb-3">
+  <img src={logo} alt="Animalog" style={{ height: '200px' }} />
+  <p style={{ fontSize: '1.1rem', color: '#555', marginTop: '10px' }}>
+    <em>“Adotar é um ato de amor que muda duas vidas.”</em>
+  </p>
+</div>
+
 
         <div className="d-flex gap-2 mt-3 mt-md-0">
           <button
