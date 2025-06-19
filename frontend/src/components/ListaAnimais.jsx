@@ -54,6 +54,18 @@ useEffect(() => {
   /* ── abre ficha ── */
   const abreFicha = a => { setSel(a); setShow(true); };
 
+const atualizarTodosAdocao = async (valor) => {
+  try {
+    await axios.put('https://animalog-backend.onrender.com/animais/adocao/todos', { valor });
+    alert(`Todos os animais foram ${valor ? 'colocados' : 'retirados'} da adoção.`);
+    carregaAnimais(); // atualiza lista
+  } catch (err) {
+    console.error(err);
+    alert('Erro ao atualizar estado de adoção.');
+  }
+};
+
+
   return (
     <div>
       {/* cabeçalho + filtros */}
@@ -80,6 +92,33 @@ useEffect(() => {
           <option value="canina">Canina</option>
           <option value="felina">Felina</option>
         </select>
+		
+		  {/* DROPDOWN técnico */}
+  {tipo === 'tecnico' && (
+    <div className="dropdown">
+      <button
+        className="btn btn-outline-secondary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        ⚙️ Ações em Massa
+      </button>
+      <ul className="dropdown-menu">
+        <li>
+          <button className="dropdown-item" onClick={() => atualizarTodosAdocao(true)}>
+            ✅ Colocar todos em adoção
+          </button>
+        </li>
+        <li>
+          <button className="dropdown-item" onClick={() => atualizarTodosAdocao(false)}>
+            ❌ Retirar todos da adoção
+          </button>
+        </li>
+      </ul>
+    </div>
+  )}
+
       </div>
 
       {/* cards */}

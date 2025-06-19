@@ -348,4 +348,17 @@ router.delete('/:id', async (req, res) => {
 });
 
 
+// Rota para atualizar o estado de adoção de todos os animais
+router.put('/adocao/todos', async (req, res) => {
+  const { valor } = req.body; // true ou false
+  try {
+    await pool.query('UPDATE animais SET disponivel_adocao = $1', [valor]);
+    res.json({ message: 'Estado de adoção atualizado para todos os animais.' });
+  } catch (error) {
+    console.error('Erro ao atualizar estado de adoção em massa:', error);
+    res.status(500).json({ error: 'Erro ao atualizar estado de adoção.' });
+  }
+});
+
+
 module.exports = router;
