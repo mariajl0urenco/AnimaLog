@@ -120,7 +120,7 @@ function GestaoUtilizadores() {
       <hr />
 
       <h5 className="mt-4">Utilizadores Existentes</h5>
-      <Table striped bordered hover>
+      <Table className="tabela-utilizadores">
         <thead>
           <tr>
             <th>Nome</th>
