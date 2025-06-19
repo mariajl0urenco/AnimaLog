@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import logo from '../assets/logo.jpg';
-import ModalInfo from './ModalInfo'; // novo import
+import ModalInfo from './ModalInfo';
 
 export default function CabecalhoPublico({ onAgendarVisita }) {
   const navigate = useNavigate();
@@ -9,22 +9,26 @@ export default function CabecalhoPublico({ onAgendarVisita }) {
 
   return (
     <div className="p-4 mb-4 rounded shadow-sm bg-light bg-opacity-75">
-      <div className="d-flex justify-content-center mb-3">
-        <img src={logo} alt="Animalog" style={{ height: '200px' }} />
+      {/* Cabeçalho superior */}
+      <div className="d-flex justify-content-between align-items-center flex-wrap">
+        <img src={logo} alt="Animalog" style={{ height: '80px' }} />
+
+        <div className="d-flex gap-2 mt-3 mt-md-0">
+          <button className="btn btn-outline-secondary" onClick={onAgendarVisita}>
+            Agendar Visita
+          </button>
+          <button className="btn btn-outline-secondary" onClick={() => setShowInfo(true)}>
+            Informações
+          </button>
+          <button className="btn btn-outline-info" onClick={() => navigate('/login')}>
+            Entrar como Funcionário
+          </button>
+        </div>
       </div>
-<hr />
-      <div className="d-flex justify-content-center mb-3 gap-2 flex-wrap">
-        <button className="btn btn-outline-secondary" onClick={onAgendarVisita}>
-          Agendar Visita
-        </button>
-		<button className="btn btn-outline-secondary" onClick={() => setShowInfo(true)}>
-          Informações
-        </button>
-        <button className="btn btn-outline-info" onClick={() => navigate('/login')}>
-          Entrar como Funcionário
-        </button>
-      </div>
-<hr />
+
+      <hr />
+
+      {/* Título e subtítulo */}
       <div className="text-center">
         <h2 className="fw-bold mb-1">Animais para Adoção</h2>
         <p className="text-muted mb-0">
