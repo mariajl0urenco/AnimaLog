@@ -1,11 +1,8 @@
 .cabecalho {
-  background: linear-gradient(to right, #cce0f5, #99c2e6);
+  background-color: #2c3e50;
   color: white;
-  padding: 12px 24px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 14px 24px;
+  border-bottom: 3px solid #1abc9c;
 }
 
 .logo-titulo {
