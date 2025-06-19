@@ -1,0 +1,55 @@
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: linear-gradient(to bottom, #eef3f7, #c6d6df);
+  color: #333;
+}
+
+.tabela-pedidos {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  background-color: white;
+  margin-bottom: 2rem;
+}
+
+.tabela-pedidos th {
+  background-color: #f0f4f8;
+  padding: 12px 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.tabela-pedidos td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.tabela-pedidos tr:hover {
+  background-color: #f7fbff;
+}
+
+.tabela-pedidos select {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.btn-eliminar {
+  background-color: #dc3545;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-eliminar:hover {
+  background-color: #bb2d3b;
+}

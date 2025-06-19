@@ -16,3 +16,10 @@ footer {
   border-top: 0px solid #ccc;
   color: #330;
 }
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background: linear-gradient(to bottom, #eef3f7, #bdd3df);
+  color: #333;
+}
+

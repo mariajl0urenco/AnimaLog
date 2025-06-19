@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import './ConsultaPedidos.css';
 
 function ConsultaPedidos() {
   const [pedidos, setPedidos] = useState([]);
@@ -31,7 +32,7 @@ function ConsultaPedidos() {
   return (
     <div className="container">
       <h2 className="my-4">📋 Pedidos de Visita</h2>
-      <table className="table table-bordered table-striped">
+      <table className="tabela-pedidos">
         <thead className="table-light">
           <tr>
             <th>Animal</th>
@@ -65,9 +66,10 @@ function ConsultaPedidos() {
               </td>
               <td>{new Date(p.criado_em).toLocaleString()}</td>
               <td>
-                <button className="btn btn-sm btn-danger" onClick={() => eliminarPedido(p.id)}>
-                  🗑️ Eliminar
-                </button>
+                <button className="btn-eliminar" onClick={() => eliminarPedido(p.id)}>
+  🗑️ Eliminar
+</button>
+
               </td>
             </tr>
           ))}
