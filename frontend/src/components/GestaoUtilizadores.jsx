@@ -1,7 +1,7 @@
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Form, Button, Alert, Table, Modal } from 'react-bootstrap';
+import './GestaoUtilizadores.css';
 
 function GestaoUtilizadores() {
   const [nome, setNome] = useState('');
@@ -93,7 +93,7 @@ function GestaoUtilizadores() {
       {mensagem && <Alert variant="success">{mensagem}</Alert>}
       {erro && <Alert variant="danger">{erro}</Alert>}
 
-      <Form onSubmit={criarUtilizador}>
+      <Form onSubmit={criarUtilizador} className="form-gestao-utilizador">
         <h5>Criar Novo Utilizador</h5>
         <Form.Group className="mb-2">
           <Form.Label>Nome</Form.Label>

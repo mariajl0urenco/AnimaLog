@@ -1,0 +1,21 @@
+.form-gestao-utilizador {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-gestao-utilizador h5 {
+  text-align: center;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 576px) {
+  .form-gestao-utilizador {
+    padding: 1rem;
+    margin: 1rem;
+  }
+}
