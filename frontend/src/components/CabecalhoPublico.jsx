@@ -12,7 +12,7 @@ export default function CabecalhoPublico({ onAgendarVisita }) {
       <div
         className="p-4 mb-4 shadow-sm"
         style={{
-          backgroundColor: 'rgba(255, 255, 255, 0.1)',
+          backgroundColor: 'rgba(255, 255, 255, 0.2)',
           borderRadius: '12px',
           padding: '24px',
           boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
@@ -21,7 +21,7 @@ export default function CabecalhoPublico({ onAgendarVisita }) {
         {/* Linha com logo, frase e botões */}
         <div className="d-flex justify-content-between align-items-center flex-wrap">
           {/* Logótipo à esquerda */}
-          <img src={logo} alt="Animalog" style={{ height: '140px' }} />
+          <img src={logo} alt="Animalog" style={{ height: '200px' }} />
 
           {/* Frase no centro */}
           <div className="text-center flex-grow-1">
