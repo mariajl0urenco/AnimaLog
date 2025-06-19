@@ -1,3 +1,14 @@
+/* Aplica Nunito a todos os elementos */
+* {
+  font-family: 'Nunito', sans-serif;
+}
+
+html, body {
+  font-family: 'Nunito', sans-serif;
+  background: linear-gradient(to bottom, #eef3f7, #bdd3df);
+  color: #333;
+}
+
 .app-container {
   background-image: url('/wallpaper.jpg'); 
   background-size: cover;
@@ -7,6 +18,7 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  font-family: 'Nunito', sans-serif;
 }
 
 footer {
@@ -16,10 +28,3 @@ footer {
   border-top: 0px solid #ccc;
   color: #330;
 }
-
-body {
-  font-family: 'Nunito', sans-serif;
-  background: linear-gradient(to bottom, #eef3f7, #bdd3df);
-  color: #333;
-}
-
