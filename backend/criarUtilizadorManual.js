@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const pool = require('./db'); // Usa o mesmo que usas no auth.js
+const pool = require('./db'); 
 require('dotenv').config();
 
 (async () => {
