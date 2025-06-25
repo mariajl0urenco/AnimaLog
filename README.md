@@ -11,9 +11,9 @@ A AnimaLog é uma plataforma web para gestão de animais dos Centro de Recolha O
 - Backend: Node.js + Express
 - Frontend: React.js
 - Base de dados: PostgreSQL
-- Alojamento: Firebase
+- Alojamento: Vercel + Render + Supabase + Cloudinary
 
 ## Estrutura do Projeto
 - `/documentacao`: Relatórios e cronograma
-- `/frontend`: Interface do utilizador (a desenvolver)
-- `/backend`: API e gestão de dados (a desenvolver)
+- `/frontend`: Interface do utilizador 
+- `/backend`: API e gestão de dados 
